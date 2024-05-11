@@ -9,3 +9,37 @@ body {
     box-sizing: border-box;
   }
 }
+
+.container {
+  padding: 15px 30px;
+  max-width: 1360px;
+  margin: auto;
+}
+
+header.header {
+  .header__title {
+    font-size: 30px;
+    line-height: 36px;
+    font-weight: 800;
+  }
+  .header__subtitle {
+    color: #4f4f4f;
+    line-height: 16px;
+    width: 100%;
+  }
+  .header__actions {
+    display: flex;
+    button.header__actions-btn {
+      width: 50px;
+      height: 50px;
+      border: none;
+      background: none;
+      color: #4f4f4f;
+      cursor: pointer;
+      transition: color 0.3s ease-out;
+      &:hover {
+        color: #000;
+      }
+    }
+  }
+}
