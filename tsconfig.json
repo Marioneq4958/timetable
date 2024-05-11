@@ -1,7 +1,16 @@
 {
-  "extends": "@quasar/app-webpack/tsconfig-preset",
+  "extends": "@vue/tsconfig/tsconfig.web.json",
+  "include": ["env.d.ts", "src/**/*", "src/**/*.vue"],
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2021", "dom", "webworker"],
-  }
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+
+  "references": [
+    {
+      "path": "./tsconfig.config.json"
+    }
+  ]
 }

@@ -1,51 +1,85 @@
+<script setup lang="ts">
+import { RouterLink, RouterView } from 'vue-router'
+import HelloWorld from './components/HelloWorld.vue'
+</script>
+
 <template>
-  <router-view />
+  <header>
+    <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
+
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
+
+      <nav>
+        <RouterLink to="/">Home</RouterLink>
+        <RouterLink to="/about">About</RouterLink>
+      </nav>
+    </div>
+  </header>
+
+  <RouterView />
 </template>
 
-<script lang="ts" setup>
-import { provide, ref, watch } from 'vue';
-import { useQuasar } from 'quasar';
-import { useConfigStore } from 'stores/config';
-import { useRouter } from 'vue-router';
-import { Client, clientSymbol, getClient } from 'src/api/client';
-import { useNavigation } from 'src/router/navigation';
-import { paths } from 'src/router/path-builder';
-
-const quasar = useQuasar();
-const config = useConfigStore();
-const router = useRouter();
-const navigation = useNavigation();
-
-const client = ref<Client | undefined>();
-provide(clientSymbol, client);
-watch(() => navigation.params.tri, (tri, oldTri) => {
-  if (tri === oldTri || tri === null) return;
-  try {
-    client.value = getClient(tri);
-  } catch (error) {
-    console.error(error);
-    quasar.notify({
-      type: 'negative',
-      message: 'Niepoprawny identyfikator planu lekcji',
-    });
-    router.push(paths.home);
-    client.value = undefined;
-  }
-}, { immediate: true });
-
-if (window.sessionStorage.getItem('just-updated') !== null) {
-  window.sessionStorage.removeItem('just-updated');
-  quasar.notify({
-    icon: 'arrow_circle_up',
-    message: 'Zaktualizowano aplikację!',
-    caption: 'Korzystasz teraz z najnowszej wersji',
-    timeout: 6000,
-  });
+<style scoped>
+header {
+  line-height: 1.5;
+  max-height: 100vh;
 }
 
-watch(
-  () => config.dark,
-  (value) => quasar.dark.set(value),
-  { immediate: true },
-);
-</script>
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+nav {
+  width: 100%;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 2rem;
+}
+
+nav a.router-link-exact-active {
+  color: var(--color-text);
+}
+
+nav a.router-link-exact-active:hover {
+  background-color: transparent;
+}
+
+nav a {
+  display: inline-block;
+  padding: 0 1rem;
+  border-left: 1px solid var(--color-border);
+}
+
+nav a:first-of-type {
+  border: 0;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  nav {
+    text-align: left;
+    margin-left: -1rem;
+    font-size: 1rem;
+
+    padding: 1rem 0;
+    margin-top: 1rem;
+  }
+}
+</style>
