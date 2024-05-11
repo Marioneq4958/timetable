@@ -43,3 +43,40 @@ header.header {
     }
   }
 }
+
+@keyframes skeleton {
+  0% {
+    background: #efefef;
+  }
+  50% {
+    background: #e8e8e8;
+  }
+  100% {
+    background: #efefef;
+  }
+}
+
+.header--skeleton {
+  .header--skeleton__title {
+    height: 30px;
+    margin: 3px 0;
+    border-radius: 5px;
+    animation: 1.5s skeleton linear infinite;
+  }
+  .header--skeleton__subtitle {
+    height: 16px;
+    margin: 4.5px 0;
+    border-radius: 5px;
+    animation: 1.5s skeleton linear infinite;
+  }
+  .header--skeleton__actions {
+    display: flex;
+    .header--skeleton__actions-btn {
+      width: 30px;
+      height: 30px;
+      margin: 10px;
+      border-radius: 5px;
+      animation: 1.5s skeleton linear infinite;
+    }
+  }
+}

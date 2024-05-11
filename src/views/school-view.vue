@@ -16,7 +16,17 @@ onMounted(async () => {
 </script>
 
 <template>
-  <header class="header" v-if="school">
+  <div class="header--skeleton" v-if="!school">
+    <div class="header--skeleton__actions">
+      <div class="header--skeleton__actions-btn"/>
+      <span style="flex: 1;"/>
+      <div class="header--skeleton__actions-btn"/>
+      <div class="header--skeleton__actions-btn"/>
+    </div>
+    <div class="header--skeleton__title" />
+    <div class="header--skeleton__subtitle" />
+  </div>
+  <header class="header" v-else>
     <div class="header__actions">
       <button class="header__actions-btn">
         <span class="material-symbols-rounded"> keyboard_backspace </span>
