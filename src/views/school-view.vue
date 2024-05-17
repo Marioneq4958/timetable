@@ -18,10 +18,10 @@ onMounted(async () => {
 <template>
   <div class="header--skeleton" v-if="!school">
     <div class="header--skeleton__actions">
-      <div class="header--skeleton__actions-btn"/>
-      <span style="flex: 1;"/>
-      <div class="header--skeleton__actions-btn"/>
-      <div class="header--skeleton__actions-btn"/>
+      <div class="header--skeleton__actions-btn" />
+      <span style="flex: 1" />
+      <div class="header--skeleton__actions-btn" />
+      <div class="header--skeleton__actions-btn" />
     </div>
     <div class="header--skeleton__title" />
     <div class="header--skeleton__subtitle" />
@@ -40,7 +40,14 @@ onMounted(async () => {
       </button>
     </div>
     <div class="header__title">{{ school.name }}</div>
-    <div class="subtitle">{{ getFullAddress(school) }}</div>
+    <div class="header__subtitle">
+      {{ getFullAddress(school) }}
+      <a
+        :href="`https://rspo.gov.pl/institutions/${school.rspo_id}`"
+        target="_blank"
+        >[RSPO: {{ school.rspo_id }}]</a
+      >
+    </div>
   </header>
   <p v-if="loading">Ładowanie danych...</p>
   <p v-else>{{ school }}</p>
