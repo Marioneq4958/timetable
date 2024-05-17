@@ -57,9 +57,43 @@ onMounted(async () => {
       >
     </div>
   </header>
-  <p v-if="loading">Ładowanie danych...</p>
-  <p v-else>
-    <strong>Szkoła:</strong> {{ school }}<br />
-    <strong>Plan:</strong> {{ version }}
-  </p>
+  <p v-if="loading || !version || !school">Ładowanie danych...</p>
+  <div v-else>
+    <table>
+      <tbody>
+        <tr>
+          <td>Szkoła</td>
+          <td>{{ school }}</td>
+        </tr>
+        <tr>
+          <td>Klasy</td>
+          <td>{{
+        version.common.classes
+          .map((unit) => unit.short ?? unit.name ?? unit.fullName)
+          .join(", ")
+      }}</td>
+        </tr>
+        <tr>
+          <td>Nauczyciele</td>
+          <td>{{
+        version.common.teachers
+          .map((unit) => unit.fullName ?? unit.name ?? unit.short)
+          .join(", ")
+      }}</td>
+        </tr>
+        <tr>
+          <td>Sale</td>
+          <td>{{
+        version.common.rooms
+          .map((unit) => unit.fullName ?? unit.name ?? unit.short)
+          .join(", ")
+      }}</td>
+        </tr>
+        <tr>
+          <td>Wygenerowano</td>
+          <td>{{ school.optivum_versions[0].generated_on }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </template>
