@@ -15,6 +15,7 @@ const version = ref<TimetableVersionData | null>(null);
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
+  //TODO: Obsługa błędów
   school.value = await getSchoolById(props.schoolId);
   if (school.value.optivum_versions.length) {
     version.value = await getOptivumVersion(
@@ -28,17 +29,7 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div class="header--skeleton" v-if="!school">
-    <div class="header--skeleton__actions">
-      <div class="header--skeleton__actions-btn" />
-      <span style="flex: 1" />
-      <div class="header--skeleton__actions-btn" />
-      <div class="header--skeleton__actions-btn" />
-    </div>
-    <div class="header--skeleton__title" />
-    <div class="header--skeleton__subtitle" />
-  </div>
-  <header class="header" v-else>
+  <header class="header" v-if="school">
     <div class="header__actions">
       <button class="header__actions-btn">
         <span class="material-symbols-rounded"> keyboard_backspace </span>
@@ -61,7 +52,26 @@ onMounted(async () => {
       >
     </div>
   </header>
-  <p v-if="loading || !version || !school">Ładowanie danych...</p>
+  <div class="header--skeleton" v-else-if="loading">
+    <div class="header--skeleton__actions">
+      <div class="header--skeleton__actions-btn" />
+      <span style="flex: 1" />
+      <div class="header--skeleton__actions-btn" />
+      <div class="header--skeleton__actions-btn" />
+    </div>
+    <div class="header--skeleton__title" />
+    <div class="header--skeleton__subtitle" />
+  </div>
+  <p v-if="loading">Ładowanie danych...</p>
+  <p v-else-if="!school">Nie znaleziono szkoły</p>
+  <!-- TODO: Redirect do /s/:schoolId gdy w urlu jest określona wersja która nie istnieje -->
+  <p v-else-if="!version">
+    {{
+      props.generatedOn && props.discriminant
+        ? "Nie znaleziono planu"
+        : "Ta szkoła nie posiada żadnego planu"
+    }}
+  </p>
   <div v-else>
     <table>
       <tbody>
@@ -71,33 +81,48 @@ onMounted(async () => {
         </tr>
         <tr>
           <td>Klasy</td>
-          <td>{{
-        version.common.classes
-          .map((unit) => unit.short ?? unit.name ?? unit.fullName)
-          .join(", ")
-      }}</td>
+          <td>
+            <ul>
+              <li v-for="(unit, index) in version.common.classes" :key="index">
+                <a href="#">{{ unit.short ?? unit.name ?? unit.fullName }}</a>
+              </li>
+            </ul>
+            <a href="#">Zestawienie</a>
+          </td>
         </tr>
         <tr>
           <td>Nauczyciele</td>
-          <td>{{
-        version.common.teachers
-          .map((unit) => unit.fullName ?? unit.name ?? unit.short)
-          .join(", ")
-      }}</td>
+          <td>
+            <ul>
+              <li v-for="(unit, index) in version.common.teachers" :key="index">
+                <a href="#">{{ unit.fullName ?? unit.name ?? unit.short }}</a>
+              </li>
+            </ul>
+            <a href="#">Zestawienie</a>
+          </td>
         </tr>
         <tr>
           <td>Sale</td>
-          <td>{{
-        version.common.rooms
-          .map((unit) => unit.fullName ?? unit.name ?? unit.short)
-          .join(", ")
-      }}</td>
+          <td>
+            <ul>
+              <li v-for="(unit, index) in version.common.rooms" :key="index">
+                <a href="#">{{ unit.fullName ?? unit.name ?? unit.short }}</a>
+              </li>
+            </ul>
+            <a href="#">Szukaj</a>
+            <a href="#">Zestawienie</a>
+          </td>
         </tr>
         <tr>
           <td>Wygenerowano</td>
-          <td>{{ props.generatedOn ?? school.optivum_versions[0].generated_on }}</td>
+          <td>
+            {{ props.generatedOn ?? school.optivum_versions[0].generated_on }} z
+            użyciem planu Optivum firmy VULCAN
+          </td>
         </tr>
       </tbody>
     </table>
+    <!-- Brak danych z API -->
+    <a href="#">Źródło danych</a>
   </div>
 </template>
