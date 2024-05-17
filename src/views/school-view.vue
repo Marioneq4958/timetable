@@ -1,16 +1,24 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue";
-import type { School } from "@/api/types";
-import { getSchoolById } from "@/api/client";
+import type { School, TimetableVersionData } from "@/api/types";
+import { getOptivumVersion, getSchoolById } from "@/api/client";
 import { getFullAddress } from "@/utils";
 
 const props = defineProps<{ schoolId: number }>();
 
 const school = ref<School | null>(null);
+const version = ref<TimetableVersionData | null>(null);
 const loading = ref<boolean>(true);
 
 onMounted(async () => {
   school.value = await getSchoolById(props.schoolId);
+  if (school.value.optivum_versions[0]) {
+    version.value = await getOptivumVersion(
+      props.schoolId,
+      school.value.optivum_versions[0].generated_on,
+      school.value.optivum_versions[0].discriminant
+    );
+  }
   loading.value = false;
 });
 </script>
@@ -50,5 +58,8 @@ onMounted(async () => {
     </div>
   </header>
   <p v-if="loading">Ładowanie danych...</p>
-  <p v-else>{{ school }}</p>
+  <p v-else>
+    <strong>Szkoła:</strong> {{ school }}<br />
+    <strong>Plan:</strong> {{ version }}
+  </p>
 </template>
