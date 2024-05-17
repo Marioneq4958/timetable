@@ -4,7 +4,11 @@ import type { School, TimetableVersionData } from "@/api/types";
 import { getOptivumVersion, getSchoolById } from "@/api/client";
 import { getFullAddress } from "@/utils";
 
-const props = defineProps<{ schoolId: number }>();
+const props = defineProps<{
+  schoolId: number;
+  generatedOn: string;
+  discriminant: number;
+}>();
 
 const school = ref<School | null>(null);
 const version = ref<TimetableVersionData | null>(null);
@@ -12,11 +16,11 @@ const loading = ref<boolean>(true);
 
 onMounted(async () => {
   school.value = await getSchoolById(props.schoolId);
-  if (school.value.optivum_versions[0]) {
+  if (school.value.optivum_versions.length) {
     version.value = await getOptivumVersion(
       props.schoolId,
-      school.value.optivum_versions[0].generated_on,
-      school.value.optivum_versions[0].discriminant
+      props.generatedOn ?? school.value.optivum_versions[0].generated_on,
+      props.discriminant ?? school.value.optivum_versions[0].discriminant
     );
   }
   loading.value = false;
@@ -91,7 +95,7 @@ onMounted(async () => {
         </tr>
         <tr>
           <td>Wygenerowano</td>
-          <td>{{ school.optivum_versions[0].generated_on }}</td>
+          <td>{{ props.generatedOn ?? school.optivum_versions[0].generated_on }}</td>
         </tr>
       </tbody>
     </table>
