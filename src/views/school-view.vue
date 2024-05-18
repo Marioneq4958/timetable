@@ -91,6 +91,10 @@ onMounted(async () => {
       <div class="flex-col">
         <div class="section__title">Nauczyciele</div>
         <div class="section__content">
+          <div class="input">
+            <label class="input__label" for="input-teacher-search">Szukaj</label>
+            <input id="input-teacher-search" class="input__control" />
+          </div>
           <ul>
             <li v-for="(unit, index) in version.common.teachers" :key="index">
               <router-link to="#">{{
@@ -103,6 +107,10 @@ onMounted(async () => {
       </div>
       <div class="flex-col">
         <div class="section__title">Sale</div>
+        <div class="input">
+          <label class="input__label" for="input-room-search">Szukaj</label>
+          <input id="input-room-search" class="input__control" />
+        </div>
         <div class="section__content">
           <ul>
             <li v-for="(unit, index) in version.common.rooms" :key="index">
