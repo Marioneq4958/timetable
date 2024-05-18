@@ -3,6 +3,7 @@ import { onMounted, ref } from "vue";
 import type { School, TimetableVersionData } from "@/api/types";
 import { getOptivumVersion, getSchoolById } from "@/api/client";
 import { getFullAddress } from "@/utils";
+import { RouterLink } from "vue-router";
 
 const props = defineProps<{
   schoolId: number;
@@ -72,57 +73,69 @@ onMounted(async () => {
         : "Ta szkoła nie posiada żadnego planu"
     }}
   </p>
-  <div v-else>
-    <table>
-      <tbody>
-        <tr>
-          <td>Szkoła</td>
-          <td>{{ school }}</td>
-        </tr>
-        <tr>
-          <td>Klasy</td>
-          <td>
-            <ul>
-              <li v-for="(unit, index) in version.common.classes" :key="index">
-                <a href="#">{{ unit.short ?? unit.name ?? unit.fullName }}</a>
-              </li>
-            </ul>
-            <a href="#">Zestawienie</a>
-          </td>
-        </tr>
-        <tr>
-          <td>Nauczyciele</td>
-          <td>
-            <ul>
-              <li v-for="(unit, index) in version.common.teachers" :key="index">
-                <a href="#">{{ unit.fullName ?? unit.name ?? unit.short }}</a>
-              </li>
-            </ul>
-            <a href="#">Zestawienie</a>
-          </td>
-        </tr>
-        <tr>
-          <td>Sale</td>
-          <td>
-            <ul>
-              <li v-for="(unit, index) in version.common.rooms" :key="index">
-                <a href="#">{{ unit.fullName ?? unit.name ?? unit.short }}</a>
-              </li>
-            </ul>
-            <a href="#">Szukaj</a>
-            <a href="#">Zestawienie</a>
-          </td>
-        </tr>
-        <tr>
-          <td>Wygenerowano</td>
-          <td>
-            {{ props.generatedOn ?? school.optivum_versions[0].generated_on }} z
-            użyciem planu Optivum firmy VULCAN
-          </td>
-        </tr>
-      </tbody>
-    </table>
-    <!-- Brak danych z API -->
-    <a href="#">Źródło danych</a>
-  </div>
+  <main class="main" v-else>
+    <div class="flex-row">
+      <div class="flex-col">
+        <div class="section__title">Oddziały</div>
+        <div class="section__content">
+          <ul>
+            <li v-for="(unit, index) in version.common.classes" :key="index">
+              <router-link to="#">{{
+                unit.short ?? unit.name ?? unit.fullName
+              }}</router-link>
+            </li>
+          </ul>
+          <router-link to="#">Zestawienie</router-link>
+        </div>
+      </div>
+      <div class="flex-col">
+        <div class="section__title">Nauczyciele</div>
+        <div class="section__content">
+          <ul>
+            <li v-for="(unit, index) in version.common.teachers" :key="index">
+              <router-link to="#">{{
+                unit.fullName ?? unit.name ?? unit.short
+              }}</router-link>
+            </li>
+          </ul>
+          <router-link to="#">Zestawienie</router-link>
+        </div>
+      </div>
+      <div class="flex-col">
+        <div class="section__title">Sale</div>
+        <div class="section__content">
+          <ul>
+            <li v-for="(unit, index) in version.common.rooms" :key="index">
+              <router-link to="#">{{
+                unit.fullName ?? unit.name ?? unit.short
+              }}</router-link>
+            </li>
+          </ul>
+          <button>Szukaj</button>
+          <router-link to="#">Zestawienie</router-link>
+        </div>
+      </div>
+    </div>
+    <p>
+      Wygenerowano
+      {{ props.generatedOn ?? school.optivum_versions[0].generated_on }} z
+      użyciem planu Optivum firmy VULCAN
+    </p>
+  </main>
 </template>
+
+<style lang="scss">
+main.main {
+  margin-top: 20px;
+}
+.flex-row {
+  display: flex;
+  gap: 15px;
+}
+.flex-col {
+  flex: 1;
+}
+.section__title {
+  font-weight: 600;
+}
+</style>
