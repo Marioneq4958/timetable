@@ -78,8 +78,12 @@ onMounted(async () => {
       <div class="flex-col">
         <div class="section__title">Oddziały</div>
         <div class="section__content">
-          <ul>
-            <li v-for="(unit, index) in version.common.classes" :key="index">
+          <ul class="units-list">
+            <li
+              class="units-list__item"
+              v-for="(unit, index) in version.common.classes"
+              :key="index"
+            >
               <router-link to="#">{{
                 unit.short ?? unit.name ?? unit.fullName
               }}</router-link>
@@ -95,8 +99,12 @@ onMounted(async () => {
             <label class="input__label" for="input-teacher-search">Szukaj</label>
             <input id="input-teacher-search" class="input__control" />
           </div>
-          <ul>
-            <li v-for="(unit, index) in version.common.teachers" :key="index">
+          <ul class="units-list">
+            <li
+              class="units-list__item"
+              v-for="(unit, index) in version.common.teachers"
+              :key="index"
+            >
               <router-link to="#">{{
                 unit.fullName ?? unit.name ?? unit.short
               }}</router-link>
@@ -112,8 +120,12 @@ onMounted(async () => {
           <input id="input-room-search" class="input__control" />
         </div>
         <div class="section__content">
-          <ul>
-            <li v-for="(unit, index) in version.common.rooms" :key="index">
+          <ul class="units-list">
+            <li
+              class="units-list__item"
+              v-for="(unit, index) in version.common.rooms"
+              :key="index"
+            >
               <router-link to="#">{{
                 unit.fullName ?? unit.name ?? unit.short
               }}</router-link>
@@ -137,6 +149,7 @@ onMounted(async () => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: #fafafa;
 }
 main.main {
   margin-top: 20px;
@@ -158,5 +171,29 @@ main.main {
 }
 .section__title {
   font-weight: 600;
+}
+ul.units-list {
+  background: #fff;
+  border-radius: 7px;
+  list-style: none;
+  margin: 10px 0 0 0;
+  padding: 8px;
+  border: 1px solid #efefef;
+  li.units-list__item {
+    a {
+      width: 100%;
+      display: block;
+      padding: 8px 10px;
+      border-radius: 5px;
+      text-decoration: none;
+      color: #030303;
+      transition: all 0.25s ease-out;
+      font-size: 15px;
+      &:hover {
+        background: #0000000b;
+        color: #000;
+      }
+    }
+  }
 }
 </style>
