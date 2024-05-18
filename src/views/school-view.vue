@@ -63,16 +63,16 @@ onMounted(async () => {
     <div class="header--skeleton__title" />
     <div class="header--skeleton__subtitle" />
   </div>
-  <p v-if="loading">Ładowanie danych...</p>
-  <p v-else-if="!school">Nie znaleziono szkoły</p>
+  <div class="center" v-if="loading">Ładowanie danych...</div>
+  <div class="center" v-else-if="!school">Nie znaleziono szkoły</div>
   <!-- TODO: Redirect do /s/:schoolId gdy w urlu jest określona wersja która nie istnieje -->
-  <p v-else-if="!version">
+  <div class="center" v-else-if="!version">
     {{
       props.generatedOn && props.discriminant
         ? "Nie znaleziono planu"
         : "Ta szkoła nie posiada żadnego planu"
     }}
-  </p>
+  </div>
   <main class="main" v-else>
     <div class="flex-row">
       <div class="flex-col">
@@ -125,8 +125,21 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
+.container {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
 main.main {
   margin-top: 20px;
+  flex: 1;
+}
+.center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 .flex-row {
   display: flex;
