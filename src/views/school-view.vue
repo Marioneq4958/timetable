@@ -136,11 +136,18 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <p>
-      Wygenerowano
-      {{ props.generatedOn ?? school.optivum_versions[0].generated_on }} z
-      użyciem planu Optivum firmy VULCAN
-    </p>
+    <div class="version-info">
+      <div class="version-info__text">
+        Plan wygenerowany
+        <span style="font-weight: 500">
+          {{ props.generatedOn ?? school.optivum_versions[0].generated_on }}
+        </span>
+      </div>
+      <div class="version-info__buttons">
+        <button class="version-info__button">Więcej informacji</button>
+        <button class="version-info__button">Zobacz inne plany tej szkoły</button>
+      </div>
+    </div>
   </main>
 </template>
 
@@ -193,6 +200,32 @@ ul.units-list {
         background: #0000000b;
         color: #000;
       }
+    }
+  }
+}
+.version-info {
+  color: #141414;
+  background: #fff;
+  border-radius: 7px;
+  margin: 10px 0 0 0;
+  padding: 15px;
+  border: 1px solid #efefef;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  .version-info__buttons {
+    display: flex;
+    gap: 10px;
+    button.version-info__button {
+      padding: 8px 12px;
+      border-radius: 5px;
+      border: none;
+      font-family: 'Poppins', sans-serif;
+      font-weight: 500;
+      color: #fff;
+      background: #000;
+      cursor: pointer;
     }
   }
 }
