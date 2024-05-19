@@ -89,7 +89,7 @@ onMounted(async () => {
               }}</router-link>
             </li>
           </ul>
-          <router-link to="#">Zestawienie</router-link>
+          <router-link to="#" class="btn btn--primary">Zestawienie</router-link>
         </div>
       </div>
       <div class="flex-col">
@@ -110,7 +110,7 @@ onMounted(async () => {
               }}</router-link>
             </li>
           </ul>
-          <router-link to="#">Zestawienie</router-link>
+          <router-link to="#" class="btn btn--primary">Zestawienie</router-link>
         </div>
       </div>
       <div class="flex-col">
@@ -131,8 +131,8 @@ onMounted(async () => {
               }}</router-link>
             </li>
           </ul>
-          <button>Szukaj</button>
-          <router-link to="#">Zestawienie</router-link>
+          <button class="btn btn--secondary">Szukaj</button>
+          <router-link to="#" class="btn btn--primary">Zestawienie</router-link>
         </div>
       </div>
     </div>
@@ -152,11 +152,13 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
+#app {
+  background: #fafafa;
+  min-height: 100vh;
+}
 .container {
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  background: #fafafa;
 }
 main.main {
   margin-top: 20px;
@@ -180,10 +182,12 @@ main.main {
   font-weight: 600;
 }
 ul.units-list {
+  overflow: scroll;
+  height: 400px; //TODO
   background: #fff;
   border-radius: 7px;
   list-style: none;
-  margin: 10px 0 0 0;
+  margin: 10px 0;
   padding: 8px;
   border: 1px solid #efefef;
   li.units-list__item {
@@ -227,6 +231,29 @@ ul.units-list {
       background: #000;
       cursor: pointer;
     }
+  }
+}
+.btn {
+  width: 100%;
+  border-radius: 5px;
+  padding: 10px 14px;
+  font-size: 15px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  font-family: 'Poppins', sans-serif;
+  text-align: center;
+  display: block;
+  text-decoration: none;
+  margin-bottom: 10px;
+  &.btn--primary {
+    color: #fff;
+    background: #000;
+  }
+  &.btn--secondary {
+    border: 1px solid #efefef;
+    background: #fff;
+    color: #4a4a4a;
   }
 }
 </style>
