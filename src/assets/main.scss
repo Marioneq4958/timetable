@@ -5,12 +5,16 @@ body {
 
 #app {
   font-family: 'Poppins', sans-serif;
+  background: #fafafa;
+  min-height: 100vh;
   * {
     box-sizing: border-box;
   }
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   padding: 15px 30px;
   max-width: 1360px;
   margin: auto;

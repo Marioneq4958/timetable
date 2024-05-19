@@ -7,8 +7,8 @@ import { RouterLink } from "vue-router";
 
 const props = defineProps<{
   schoolId: number;
-  generatedOn: string;
-  discriminant: number;
+  generatedOn?: string;
+  discriminant?: number;
 }>();
 
 const school = ref<School | null>(null);
@@ -152,14 +152,6 @@ onMounted(async () => {
 </template>
 
 <style lang="scss">
-#app {
-  background: #fafafa;
-  min-height: 100vh;
-}
-.container {
-  display: flex;
-  flex-direction: column;
-}
 main.main {
   margin-top: 20px;
   flex: 1;
