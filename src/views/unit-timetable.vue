@@ -125,9 +125,48 @@ onMounted(async () => {
 </script>
 
 <template>
-  <div v-if="unit">Jednostka: {{ unit }}</div>
-  <div v-if="school">Dane szkoły: {{ school }}</div>
-  <div v-if="version">Dane wersji: {{ version }}</div>
-  <div v-if="common">Common: {{ common }}</div>
-  <div v-if="loading">Ładowanie...</div>
+  <div class="sidebar" v-if="common">
+    <input type="text" placeholder="Szukaj"/>
+    <ul>
+      <li>
+        <div>Oddziały</div>
+        <ul>
+          <li v-for="(class_, index) in common.classes.values()" :key="index">{{ class_.fullName }}</li>
+        </ul>
+      </li>
+      <li>
+        <div>Nauczyciele</div>
+        <ul>
+          <li v-for="(teacher, index) in common.teachers.values()" :key="index">{{ teacher.fullName }}</li>
+        </ul>
+      </li>
+      <li>
+        <div>Sale</div>
+        <ul>
+          <li v-for="(room, index) in common.rooms.values()" :key="index">{{ room.fullName }}</li>
+        </ul>
+      </li>
+      <li>
+        <div>Zestawienia</div>
+        <ul>
+          <li>Oddziały</li>
+          <li>Nauczyciele</li>
+          <li>Sale</li>
+        </ul>
+      </li>
+    </ul>
+    <button>Znajdź wolną salę</button>
+  </div>
 </template>
+
+<style lang="scss">
+.sidebar {
+  width: 350px;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  left: 0;
+  border-right: 1px solid #dfdfdf;
+  overflow: scroll;
+}
+</style>
