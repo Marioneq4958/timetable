@@ -17,10 +17,10 @@ function handleSectionClick(sectionName: "classes" | "teachers" | "rooms") {
 <template>
   <div class="sidebar">
     <input type="text" placeholder="Szukaj" />
-    <ul>
-      <li>
+    <ul class="units-list">
+      <li class="units-list__section">
         <button @click="handleSectionClick('classes')">Oddziały</button>
-        <ul v-if="activeSection === 'classes'">
+        <ul class="units-list__section-list" v-if="activeSection === 'classes'">
           <li
             v-for="(class_, index) in props.common.classes.values()"
             :key="index"
@@ -29,9 +29,9 @@ function handleSectionClick(sectionName: "classes" | "teachers" | "rooms") {
           </li>
         </ul>
       </li>
-      <li>
+      <li class="units-list__section">
         <button @click="handleSectionClick('teachers')">Nauczyciele</button>
-        <ul v-if="activeSection === 'teachers'">
+        <ul class="units-list__section-list" v-if="activeSection === 'teachers'">
           <li
             v-for="(teacher, index) in props.common.teachers.values()"
             :key="index"
@@ -40,9 +40,9 @@ function handleSectionClick(sectionName: "classes" | "teachers" | "rooms") {
           </li>
         </ul>
       </li>
-      <li>
+      <li class="units-list__section">
         <button @click="handleSectionClick('rooms')">Sale</button>
-        <ul v-if="activeSection === 'rooms'">
+        <ul class="units-list__section-list" v-if="activeSection === 'rooms'">
           <li v-for="(room, index) in props.common.rooms.values()" :key="index">
             {{ room.fullName }}
           </li>
@@ -69,8 +69,29 @@ function handleSectionClick(sectionName: "classes" | "teachers" | "rooms") {
   input {
     width: 100%;
   }
-  ul {
+  button {
+    font-family: "Poppins", sans-serif;
+  }
+  .units-list {
     flex: 1;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-radius: 5px;
+    .units-list__section {
+      margin-top: 10px;
+      button {
+        width: 100%;
+        text-align: left;
+        font-family: "Poppins", sans-serif;
+        overflow: scroll;
+      }
+      .units-list__section-list {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+    }
   }
 }
 </style>
