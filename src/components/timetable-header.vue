@@ -39,7 +39,8 @@ const props = defineProps<{
     {{ props.school.address_town }}
     <a
       class="font-semibold"
-      :href="`https://rspo.mein.gov.pl/institutions/${props.school.rspo_id}`"
+      target="_blank"
+      :href="`https://rspo.gov.pl/institutions/${props.school.rspo_id}`"
       >[RSPO: {{ props.school.rspo_id }}]</a
     >
   </div>
