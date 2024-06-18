@@ -1,8 +1,11 @@
 <script setup lang="ts">
+import { RouterLink } from "vue-router";
+
 const props = defineProps<{
   name: string;
   sectionId: string;
   icon: string;
+  pathSectionName: string;
   isActive: boolean;
   units: { name: string; id: string }[];
 }>();
@@ -33,12 +36,14 @@ const emit = defineEmits(["section-click"]);
       class="ml-10 mr-2 box-border overflow-hidden transition-all"
       :style="{ height: isActive ? `${34.5 * props.units.length}px` : '0px' }"
     >
-      <li
-        v-for="(unit, index) in props.units"
-        :key="index"
-        class="px-3 py-1.5 cursor-pointer text-gray-700 transition-all hover:text-gray-900 rounded-md text-ellipsis whitespace-nowrap overflow-hidden text-[15px]"
-      >
-        {{ unit.name }}
+      <li v-for="(unit, index) in props.units" :key="index">
+        <router-link
+          class="px-3 py-1.5 block cursor-pointer text-gray-700 transition-all hover:text-gray-900 rounded-md text-ellipsis whitespace-nowrap overflow-hidden text-[15px]"
+          activeClass="bg-gray-100 !text-gray-900"
+          :to="`../${pathSectionName}/${unit.id}`"
+        >
+          {{ unit.name }}
+        </router-link>
       </li>
     </ul>
   </li>

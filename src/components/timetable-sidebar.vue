@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import UnitTimetableSidebarSection from "./unit-timetable-sidebar-section.vue";
+import SidebarSection from "./timetable-sidebar-section.vue";
 import { getCommon } from "@/utils";
 import { ref } from "vue";
 
@@ -36,35 +36,39 @@ function handleSectionClick(sectionName: string) {
       </div>
     </div>
     <ul class="list-none flex-1 px-5 overflow-y-scroll">
-      <unit-timetable-sidebar-section
+      <sidebar-section
         name="Oddziały"
         section-id="classes"
         icon="school"
+        path-section-name="oddzialy"
         :isActive="activeSection === 'classes'"
         :units="[...props.common.classes.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
         @section-click="handleSectionClick('classes')"
       />
-      <unit-timetable-sidebar-section
+      <sidebar-section
         name="Uczniowie"
         section-id="students"
         icon="groups"
+        path-section-name="uczniowie"
         v-if="[...props.common.students.values()].length"
         :isActive="activeSection === 'students'"
         :units="[...props.common.students.values()].map(unit => ({ id: unit.id, name: (unit.name || unit.short)! }))"
         @section-click="handleSectionClick('students')"
       />
-      <unit-timetable-sidebar-section
+      <sidebar-section
         name="Nauczyciele"
         section-id="teachers"
         icon="groups"
+        path-section-name="nauczyciele"
         :isActive="activeSection === 'teachers'"
         :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
         @section-click="handleSectionClick('teachers')"
       />
-      <unit-timetable-sidebar-section
+      <sidebar-section
         name="Sale"
         section-id="rooms"
         icon="meeting_room"
+        path-section-name="sale"
         :isActive="activeSection === 'rooms'"
         :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
         @section-click="handleSectionClick('rooms')"
