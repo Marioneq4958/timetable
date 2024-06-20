@@ -1,5 +1,5 @@
 import axios from "axios";
-import type { School, TimetableVersionData } from "./types";
+import type { School, TimetableVersionData } from "@/types";
 
 export async function getSchoolById(rspoId: number) {
   const { data } = await axios.get<School>(
@@ -8,13 +8,13 @@ export async function getSchoolById(rspoId: number) {
   return data;
 }
 
-export async function getOptivumVersion(
+export async function getVersion(
   rspoId: number,
-  generatedOn: string,
-  discriminant: number
+  versionType: "optivum",
+  versionId: string
 ) {
   const { data } = await axios.get<TimetableVersionData>(
-    `https://tapi.dk-gl.eu/v1/schools/${rspoId}/optivum-versions/${generatedOn}/${discriminant}`
+    `https://tapi.dk-gl.eu/v1/schools/${rspoId}/${versionType}-versions/${versionId}`
   );
   return data;
 }

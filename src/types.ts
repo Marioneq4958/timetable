@@ -1,3 +1,10 @@
+export interface TimetableVersion {
+  type: string;
+  id: string;
+  generatedOn?: string;
+  data: TimetableVersionData;
+}
+
 export interface School {
   rspo_id: number;
   name: string;
@@ -137,3 +144,4 @@ export interface TimetableVersionData {
   };
   lessons: TimetableLesson[];
 }
+

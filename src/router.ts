@@ -4,9 +4,39 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/s/:schoolId(\\d+)/optivum/:generatedOn/:discriminant(\\d+)/:unitTypeName(oddzialy|nauczyciele|sale)/:unitId",
+      // TODO: Edupage
+      path: "/s/:schoolId(\\d+)/:versionType(optivum)/:versionId(.*)/:unitTypeName(oddzialy|nauczyciele|sale)/:unitId",
       component: () => import("@/views/timetable.vue"),
-      props: true,
+      props: (route) => ({
+        schoolId: Number(route.params.schoolId),
+        version: {
+          type: route.params.versionType,
+          id: route.params.versionId,
+        },
+        unit: {
+          typeName: route.params.unitTypeName,
+          id: route.params.unitId,
+        },
+      }),
+    },
+    {
+      // TODO: Edupage
+      path: "/s/:schoolId(\\d+)/:versionType(optivum)/:versionId(.*)",
+      component: () => import("@/views/timetable.vue"),
+      props: (route) => ({
+        schoolId: Number(route.params.schoolId),
+        version: {
+          type: route.params.versionType,
+          id: route.params.versionId,
+        },
+      }),
+    },
+    {
+      path: "/s/:schoolId(\\d+)",
+      component: () => import("@/views/timetable.vue"),
+      props: (route) => ({
+        schoolId: Number(route.params.schoolId),
+      }),
     },
   ],
 });

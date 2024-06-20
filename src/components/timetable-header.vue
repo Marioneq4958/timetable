@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { School } from "@/api/types";
+import type { School } from "@/types";
 
 const props = defineProps<{
   title: string;
