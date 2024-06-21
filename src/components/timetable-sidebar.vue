@@ -17,19 +17,20 @@ function handleSectionClick(sectionName: string) {
 
 <template>
   <div
-    class="h-screen bg-white w-80 flex flex-col border-r border-gray-200 overflow-y-auto sticky top-0 left-0"
+    class="h-screen bg-white dark:bg-gray-900 w-80 flex flex-col border-r dark:border-gray-700 border-gray-200 overflow-y-auto sticky top-0 left-0"
   >
     <div class="px-5 pt-4 pb-2">
       <div class="relative">
         <div
           class="pointer-events-none absolute inset-y-0 left-0 flex items-center ml-3"
         >
-          <span class="material-symbols-rounded text-lg text-gray-700"
+          <span
+            class="material-symbols-rounded text-lg text-gray-700 dark:text-gray-300"
             >search</span
           >
         </div>
         <input
-          class="block w-full rounded-md py-2 pl-10 pr-2.5 bg-gray-200 text-gray-900 placeholder:text-gray-500 text-sm leading-6 outline-none"
+          class="block w-full rounded-md py-2 pl-10 pr-2.5 bg-gray-200 dark:bg-gray-800 text-gray-900 placeholder:text-gray-500 dark:placeholder:text-gray-300 text-sm leading-6 outline-none"
           type="text"
           placeholder="Szukaj"
         />
@@ -76,7 +77,7 @@ function handleSectionClick(sectionName: string) {
     </ul>
     <div class="px-5 py-4">
       <button
-        class="text-left flex items-center text-sm font-medium gap-4 text-gray-700 hover:text-gray-900 transition-all"
+        class="text-left flex items-center text-sm font-medium gap-4 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-gray-100 transition-all"
       >
         <span class="material-symbols-rounded text-xl">keyboard_backspace</span>
         Wyjdź

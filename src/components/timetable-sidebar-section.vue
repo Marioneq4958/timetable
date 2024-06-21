@@ -16,11 +16,11 @@ const emit = defineEmits(["section-click"]);
   <li class="mt-3">
     <button
       @click="emit('section-click')"
-      class="flex text-left w-full gap-3 items-center text-gray-700 font-medium hover:text-gray-900 transition-all text-sm"
-      :class="{ '!text-gray-900': isActive }"
+      class="flex text-left w-full gap-3 items-center text-gray-700 dark:text-gray-300 font-medium hover:text-gray-900 dark:hover:text-gray-100 transition-all text-sm"
+      :class="{ '!text-gray-900': isActive, 'dark:!text-gray-100': isActive }"
     >
       <span
-        class="p-2.5 rounded-md bg-gray-200 material-symbols-rounded text-xl leading-5"
+        class="p-2.5 rounded-md bg-gray-200 dark:bg-gray-800 material-symbols-rounded text-xl leading-5"
       >
         {{ props.icon }}
       </span>
@@ -38,8 +38,8 @@ const emit = defineEmits(["section-click"]);
     >
       <li v-for="(unit, index) in props.units" :key="index">
         <router-link
-          class="px-3 py-1.5 block cursor-pointer text-gray-700 transition-all hover:text-gray-900 rounded-md text-ellipsis whitespace-nowrap overflow-hidden text-[15px]"
-          activeClass="bg-gray-100 !text-gray-900"
+          class="px-3 py-1.5 block cursor-pointer text-gray-700 dark:text-gray-300 transition-all hover:text-gray-900 dark:hover:text-gray-100 rounded-md text-ellipsis whitespace-nowrap overflow-hidden text-[15px]"
+          activeClass="bg-gray-100 !text-gray-900 dark:bg-gray-800 dark:!text-gray-100"
           :to="`../${pathSectionName}/${unit.id}`"
         >
           {{ unit.name }}
