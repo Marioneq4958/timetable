@@ -13,7 +13,7 @@ import type {
   TimetableTimeSlot,
   TimetableVersionData,
   TimetableWeek,
-} from "./api/types";
+} from "@/types";
 
 export function getFullAddress(school: School) {
   let fullAddress = `${school.address_street} ${school.address_building_number}`;

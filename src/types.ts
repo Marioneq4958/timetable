@@ -144,4 +144,3 @@ export interface TimetableVersionData {
   };
   lessons: TimetableLesson[];
 }
-

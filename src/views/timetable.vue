@@ -11,7 +11,8 @@ import type {
 import { getVersion, getSchoolById } from "@/api/client";
 import { getCommon } from "@/utils";
 import TimetableSidebar from "@/components/timetable-sidebar.vue";
-import UnitTimetable from "@/components/unit-timetable.vue";
+import TimetableInfoBanner from "@/components/timetable-info-banner.vue";
+import TimetableHeader from "@/components/timetable-header.vue";
 import { useRouter } from "vue-router";
 
 type Unit = {
@@ -142,12 +143,12 @@ function getUnitPathName(unitType: "o" | "n" | "s" | "u") {
 <template>
   <template v-if="!error">
     <timetable-sidebar v-if="common" :common="common" />
-    <div class="p-7 w-full" v-if="school && currentUnit && version_">
-      <unit-timetable
-        :school="school"
-        :unit="currentUnit"
-        :version="version_"
-      />
+    <div
+      class="p-7 w-full max-w-screen-2xl mx-auto"
+      v-if="school && currentUnit && version_"
+    >
+      <timetable-header :unit="currentUnit" :school="school" />
+      <timetable-info-banner :version="version_" />
     </div>
   </template>
   <template v-else>

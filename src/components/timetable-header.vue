@@ -1,12 +1,36 @@
 <script setup lang="ts">
 import { useAppStore } from "@/stores/app";
-import type { School } from "@/types";
+import type {
+  School,
+  TimetableClass,
+  TimetableRoom,
+  TimetableStudent,
+  TimetableTeacher,
+} from "@/types";
+import { computed } from "vue";
 
 const props = defineProps<{
-  title: string;
+  unit: {
+    type: "o" | "n" | "s" | "u";
+    data: TimetableClass | TimetableTeacher | TimetableRoom | TimetableStudent;
+  };
   school: School;
 }>();
 const { toggleDark } = useAppStore();
+const headerTitle = computed(() => {
+  switch (props.unit.type) {
+    case "o":
+      return `Plan oddziału ${props.unit.data.fullName!}`;
+    case "n":
+      return `Plan nauczyciela ${props.unit.data.fullName!}`;
+    case "s":
+      return `Plan sali ${props.unit.data.fullName!}`;
+    case "u":
+      return `Plan ucznia ${props.unit.data.short}`;
+    default:
+      return "";
+  }
+});
 </script>
 
 <template>
@@ -35,16 +59,16 @@ const { toggleDark } = useAppStore();
     </button>
   </div>
   <div class="text-3xl font-bold text-gray-900 dark:text-white mt-4">
-    {{ props.title }}
+    {{ headerTitle }}
   </div>
   <div class="font-medium uppercase text-gray-700 dark:text-gray-200">
-    {{ props.school.name }}, {{ props.school.address_zip_code }}
-    {{ props.school.address_town }}
+    {{ school.name }}, {{ school.address_zip_code }}
+    {{ school.address_town }}
     <a
       class="font-semibold"
       target="_blank"
-      :href="`https://rspo.gov.pl/institutions/${props.school.rspo_id}`"
-      >[RSPO: {{ props.school.rspo_id }}]</a
+      :href="`https://rspo.gov.pl/institutions/${school.rspo_id}`"
+      >[RSPO: {{ school.rspo_id }}]</a
     >
   </div>
 </template>
