@@ -1,4 +1,4 @@
-import { useDark, useToggle } from "@vueuse/core";
+import { useDark, useStorage, useToggle } from "@vueuse/core";
 import { defineStore } from "pinia";
 
 export const useAppStore = defineStore("app", () => {
@@ -8,5 +8,13 @@ export const useAppStore = defineStore("app", () => {
     valueDark: "dark",
   });
   const toggleDark = useToggle(isDark);
-  return { toggleDark };
+
+  const favouriteUnits = useStorage<string[]>("favourite-units", []);
+  function toggleFavouriteUnit(unit: string) {
+    const index = favouriteUnits.value.indexOf(unit);
+    if (index === -1) favouriteUnits.value.push(unit);
+    else favouriteUnits.value.splice(index, 1);
+  }
+
+  return { toggleDark, favouriteUnits, toggleFavouriteUnit };
 });
