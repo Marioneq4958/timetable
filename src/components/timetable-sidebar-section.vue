@@ -20,7 +20,7 @@ const emit = defineEmits(["section-click"]);
       :class="{ '!text-gray-900': isActive, 'dark:!text-gray-100': isActive }"
     >
       <span
-        class="p-2.5 rounded-md bg-gray-200 dark:bg-gray-800 material-symbols-rounded text-xl leading-5"
+        class="p-2.5 rounded-md bg-gray-100 dark:bg-gray-800 material-symbols-rounded text-xl leading-5"
       >
         {{ props.icon }}
       </span>

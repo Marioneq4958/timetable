@@ -20,11 +20,11 @@ const { toggleDark } = useAppStore();
 const headerTitle = computed(() => {
   switch (props.unit.type) {
     case "o":
-      return `Plan oddziału ${props.unit.data.fullName!}`;
+      return `Plan oddziału ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
     case "n":
-      return `Plan nauczyciela ${props.unit.data.fullName!}`;
+      return `Plan nauczyciela ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
     case "s":
-      return `Plan sali ${props.unit.data.fullName!}`;
+      return `Plan sali ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
     case "u":
       return `Plan ucznia ${props.unit.data.short}`;
     default:

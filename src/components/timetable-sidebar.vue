@@ -1,11 +1,12 @@
 <script setup lang="ts">
 import SidebarSection from "./timetable-sidebar-section.vue";
+import SidebarSearch from "./timetable-sidebar-search.vue";
 import { getCommon } from "@/utils";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps<{ common: ReturnType<typeof getCommon> }>();
-
 const activeSection = ref<string | null>(null);
+
 function handleSectionClick(sectionName: string) {
   if (activeSection.value === sectionName) {
     activeSection.value = null;
@@ -20,21 +21,7 @@ function handleSectionClick(sectionName: string) {
     class="h-screen bg-white dark:bg-gray-900 w-80 flex flex-col border-r dark:border-gray-700 border-gray-200 overflow-y-auto sticky top-0 left-0"
   >
     <div class="px-5 pt-4 pb-2">
-      <div class="relative">
-        <div
-          class="pointer-events-none absolute inset-y-0 left-0 flex items-center ml-3"
-        >
-          <span
-            class="material-symbols-rounded text-lg text-gray-700 dark:text-gray-300"
-            >search</span
-          >
-        </div>
-        <input
-          class="block w-full rounded-md py-2 pl-10 pr-2.5 bg-gray-200 dark:bg-gray-800 text-gray-900 placeholder:text-gray-500 dark:placeholder:text-gray-300 text-sm leading-6 outline-none"
-          type="text"
-          placeholder="Szukaj"
-        />
-      </div>
+      <sidebar-search :common="common" />
     </div>
     <ul class="list-none flex-1 px-5 overflow-y-scroll">
       <sidebar-section
@@ -43,7 +30,7 @@ function handleSectionClick(sectionName: string) {
         icon="school"
         path-section-name="oddzialy"
         :isActive="activeSection === 'classes'"
-        :units="[...props.common.classes.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
+        :units="[...props.common.classes.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!}))"
         @section-click="handleSectionClick('classes')"
       />
       <sidebar-section
@@ -62,7 +49,7 @@ function handleSectionClick(sectionName: string) {
         icon="groups"
         path-section-name="nauczyciele"
         :isActive="activeSection === 'teachers'"
-        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
+        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)! }))"
         @section-click="handleSectionClick('teachers')"
       />
       <sidebar-section
@@ -71,7 +58,7 @@ function handleSectionClick(sectionName: string) {
         icon="meeting_room"
         path-section-name="sale"
         :isActive="activeSection === 'rooms'"
-        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: unit.fullName! }))"
+        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)! }))"
         @section-click="handleSectionClick('rooms')"
       />
     </ul>
