@@ -16,7 +16,7 @@ const props = defineProps<{
   };
   school: School;
 }>();
-const { toggleDark } = useAppStore();
+const appStore = useAppStore();
 const headerTitle = computed(() => {
   switch (props.unit.type) {
     case "o":
@@ -51,7 +51,7 @@ const headerTitle = computed(() => {
     </button>
     <button
       class="rounded-md border dark:border-gray-700 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-900 transition-all hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800"
-      @click="toggleDark()"
+      @click="appStore.toggleDark()"
     >
       <span class="material-symbols-rounded text-xl leading-5 p-2.5">
         contrast
