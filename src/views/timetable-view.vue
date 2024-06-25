@@ -8,18 +8,18 @@ import TimetableInfoBanner from "@/components/timetable-info-banner.vue";
 import TimetableHeader from "@/components/timetable-header.vue";
 import { useRouter } from "vue-router";
 
-type Unit = {
+type PropsUnit = {
   typeName: "oddzialy" | "nauczyciele" | "sale" | "uczniowie";
   id: string;
 };
-type Version = {
+type PropsVersion = {
   id: string;
   type: "optivum";
 };
 const props = defineProps<{
   schoolId: number;
-  version?: Version;
-  unit?: Unit;
+  version?: PropsVersion;
+  unit?: PropsUnit;
 }>();
 const router = useRouter();
 const school = ref<School | null>(null);
@@ -130,13 +130,19 @@ function getUnitPathName(unitType: "o" | "n" | "s" | "u") {
 </script>
 
 <template>
-  <template v-if="!error">
-    <timetable-sidebar v-if="common" :common="common" />
-    <div
-      class="p-7 w-full max-w-screen-2xl mx-auto"
-      v-if="school && currentUnit && version_"
-    >
-      <timetable-header :unit="currentUnit" :school="school" />
+  <template v-if="!error && school && currentUnit && version_">
+    <timetable-sidebar
+      v-if="common"
+      :common="common"
+      :version="version_"
+      :school="school"
+    />
+    <div class="p-7 w-full max-w-screen-2xl mx-auto">
+      <timetable-header
+        :unit="currentUnit"
+        :version="version_"
+        :school="school"
+      />
       <timetable-info-banner :version="version_" />
     </div>
   </template>

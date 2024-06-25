@@ -5,9 +5,8 @@ const props = defineProps<{
   name: string;
   sectionId: string;
   icon: string;
-  pathSectionName: string;
   isActive: boolean;
-  units: { name: string; id: string }[];
+  units: { name: string; id: string; typePath: string }[];
 }>();
 const emit = defineEmits(["section-click"]);
 </script>
@@ -40,7 +39,7 @@ const emit = defineEmits(["section-click"]);
         <router-link
           class="px-3 py-1.5 block cursor-pointer text-gray-700 dark:text-gray-300 transition-all hover:text-gray-900 dark:hover:text-gray-100 rounded-md text-ellipsis whitespace-nowrap overflow-hidden text-[15px]"
           activeClass="bg-gray-100 !text-gray-900 dark:bg-gray-800 dark:!text-gray-100"
-          :to="`../${pathSectionName}/${unit.id}`"
+          :to="`../${unit.typePath}/${unit.id}`"
         >
           {{ unit.name }}
         </router-link>

@@ -1,10 +1,17 @@
 <script setup lang="ts">
 import SidebarSection from "./timetable-sidebar-section.vue";
 import SidebarSearch from "./timetable-sidebar-search.vue";
+import { useAppStore } from "@/stores/app";
 import { getCommon } from "@/utils";
-import { ref } from "vue";
+import { computed, ref } from "vue";
+import type { School, TimetableVersion } from "@/types";
 
-const props = defineProps<{ common: ReturnType<typeof getCommon> }>();
+const appStore = useAppStore();
+const props = defineProps<{
+  common: ReturnType<typeof getCommon>;
+  school: School;
+  version: TimetableVersion;
+}>();
 const activeSection = ref<string | null>(null);
 
 function handleSectionClick(sectionName: string) {
@@ -14,6 +21,53 @@ function handleSectionClick(sectionName: string) {
     activeSection.value = sectionName;
   }
 }
+
+const favourite = computed(() => [
+  ...[...props.common.classes.values()]
+    .filter((unit) =>
+      appStore.favouriteUnits.includes(
+        `${props.school.rspo_id}/${props.version.type}/${props.version.id}/o/${unit.id}`
+      )
+    )
+    .map((unit) => ({
+      id: unit.id,
+      name: (unit.fullName ?? unit.short)!,
+      typePath: "oddzialy",
+    })),
+  ...[...props.common.teachers.values()]
+    .filter((unit) =>
+      appStore.favouriteUnits.includes(
+        `${props.school.rspo_id}/${props.version.type}/${props.version.id}/n/${unit.id}`
+      )
+    )
+    .map((unit) => ({
+      id: unit.id,
+      name: (unit.fullName ?? unit.short)!,
+      typePath: "nauczyciele",
+    })),
+  ...[...props.common.rooms.values()]
+    .filter((unit) =>
+      appStore.favouriteUnits.includes(
+        `${props.school.rspo_id}/${props.version.type}/${props.version.id}/s/${unit.id}`
+      )
+    )
+    .map((unit) => ({
+      id: unit.id,
+      name: (unit.fullName ?? unit.short)!,
+      typePath: "sale",
+    })),
+  ...[...props.common.students.values()]
+    .filter((unit) =>
+      appStore.favouriteUnits.includes(
+        `${props.school.rspo_id}/${props.version.type}/${props.version.id}/u/${unit.id}`
+      )
+    )
+    .map((unit) => ({
+      id: unit.id,
+      name: (unit.name ?? unit.short)!,
+      typePath: "uczniowie",
+    })),
+]);
 </script>
 
 <template>
@@ -25,40 +79,45 @@ function handleSectionClick(sectionName: string) {
     </div>
     <ul class="list-none flex-1 px-5 overflow-y-scroll">
       <sidebar-section
+        name="Ulubione"
+        section-id="favourite"
+        icon="star"
+        :isActive="activeSection === 'favourite'"
+        :units="favourite"
+        @section-click="handleSectionClick('favourite')"
+        v-if="favourite.length"
+      />
+      <sidebar-section
         name="Oddziały"
         section-id="classes"
         icon="school"
-        path-section-name="oddzialy"
         :isActive="activeSection === 'classes'"
-        :units="[...props.common.classes.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!}))"
+        :units="[...props.common.classes.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'oddzialy'}))"
         @section-click="handleSectionClick('classes')"
       />
       <sidebar-section
         name="Uczniowie"
         section-id="students"
         icon="groups"
-        path-section-name="uczniowie"
         v-if="[...props.common.students.values()].length"
         :isActive="activeSection === 'students'"
-        :units="[...props.common.students.values()].map(unit => ({ id: unit.id, name: (unit.name || unit.short)! }))"
+        :units="[...props.common.students.values()].map(unit => ({ id: unit.id, name: (unit.name || unit.short)!, typePath: 'nauczyciele' }))"
         @section-click="handleSectionClick('students')"
       />
       <sidebar-section
         name="Nauczyciele"
         section-id="teachers"
         icon="groups"
-        path-section-name="nauczyciele"
         :isActive="activeSection === 'teachers'"
-        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)! }))"
+        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'sale' }))"
         @section-click="handleSectionClick('teachers')"
       />
       <sidebar-section
         name="Sale"
         section-id="rooms"
         icon="meeting_room"
-        path-section-name="sale"
         :isActive="activeSection === 'rooms'"
-        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)! }))"
+        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'nauczyciele' }))"
         @section-click="handleSectionClick('rooms')"
       />
     </ul>
