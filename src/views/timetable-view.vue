@@ -1,13 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import type {
-  School,
-  TimetableClass,
-  TimetableRoom,
-  TimetableStudent,
-  TimetableTeacher,
-  TimetableVersion,
-} from "@/types";
+import type { School, TimetableUnit, TimetableVersion } from "@/types";
 import { getVersion, getSchoolById } from "@/api/client";
 import { getCommon } from "@/utils";
 import TimetableSidebar from "@/components/timetable-sidebar.vue";
@@ -36,10 +29,7 @@ const error = ref<string | null>(null);
 
 const common = ref<ReturnType<typeof getCommon> | null>(null);
 
-const currentUnit = ref<{
-  type: "o" | "n" | "s" | "u";
-  data: TimetableClass | TimetableTeacher | TimetableRoom | TimetableStudent;
-} | null>(null);
+const currentUnit = ref<TimetableUnit | null>(null);
 
 watch(
   () => props,
@@ -89,12 +79,11 @@ async function loadData() {
     (props.unit.id !== currentUnit.value?.data.id ||
       props.unit.typeName[0] !== currentUnit.value?.type)
   )
-    currentUnit.value =
-      findUnit(
-        common.value,
-        props.unit.id,
-        props.unit.typeName[0] as "o" | "n" | "s" | "u"
-      ) ?? null;
+    currentUnit.value = (findUnit(
+      common.value,
+      props.unit.id,
+      props.unit.typeName[0] as "o" | "n" | "s" | "u"
+    ) ?? null) as TimetableUnit | null;
   if (!currentUnit.value)
     currentUnit.value = {
       type: "o",

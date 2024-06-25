@@ -1,30 +1,24 @@
 <script setup lang="ts">
 import { useAppStore } from "@/stores/app";
-import type {
-  School,
-  TimetableClass,
-  TimetableRoom,
-  TimetableStudent,
-  TimetableTeacher,
-} from "@/types";
+import type { School, TimetableUnit } from "@/types";
 import { computed } from "vue";
 
 const props = defineProps<{
-  unit: {
-    type: "o" | "n" | "s" | "u";
-    data: TimetableClass | TimetableTeacher | TimetableRoom | TimetableStudent;
-  };
+  unit: TimetableUnit;
   school: School;
 }>();
 const appStore = useAppStore();
 const headerTitle = computed(() => {
   switch (props.unit.type) {
     case "o":
-      return `Plan oddziału ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
+      return `Plan oddziału ${(props.unit.data.fullName ??
+        props.unit.data.short)!}`;
     case "n":
-      return `Plan nauczyciela ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
+      return `Plan nauczyciela ${(props.unit.data.fullName ??
+        props.unit.data.short)!}`;
     case "s":
-      return `Plan sali ${(props.unit.data.fullName ?? props.unit.data.short)!}`;
+      return `Plan sali ${(props.unit.data.fullName ??
+        props.unit.data.short)!}`;
     case "u":
       return `Plan ucznia ${props.unit.data.short}`;
     default:

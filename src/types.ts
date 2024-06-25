@@ -144,3 +144,12 @@ export interface TimetableVersionData {
   };
   lessons: TimetableLesson[];
 }
+
+export type TimetableUnit =
+  | { type: "o"; data: TimetableClass }
+  | { type: "n"; data: TimetableTeacher }
+  | { type: "s"; data: TimetableRoom }
+  | {
+      type: "u";
+      data: TimetableStudent;
+    };
