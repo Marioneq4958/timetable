@@ -6,7 +6,7 @@ const router = createRouter({
     {
       // TODO: Edupage
       path: "/s/:schoolId(\\d+)/:versionType(optivum)/:versionId(.*)/:unitTypeName(oddzialy|nauczyciele|sale)/:unitId",
-      component: () => import("@/views/timetable.vue"),
+      component: () => import("@/views/timetable-view.vue"),
       props: (route) => ({
         schoolId: Number(route.params.schoolId),
         version: {
@@ -22,7 +22,7 @@ const router = createRouter({
     {
       // TODO: Edupage
       path: "/s/:schoolId(\\d+)/:versionType(optivum)/:versionId(.*)",
-      component: () => import("@/views/timetable.vue"),
+      component: () => import("@/views/timetable-view.vue"),
       props: (route) => ({
         schoolId: Number(route.params.schoolId),
         version: {
@@ -33,7 +33,7 @@ const router = createRouter({
     },
     {
       path: "/s/:schoolId(\\d+)",
-      component: () => import("@/views/timetable.vue"),
+      component: () => import("@/views/timetable-view.vue"),
       props: (route) => ({
         schoolId: Number(route.params.schoolId),
       }),

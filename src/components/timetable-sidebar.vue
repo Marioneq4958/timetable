@@ -2,7 +2,7 @@
 import SidebarSection from "./timetable-sidebar-section.vue";
 import SidebarSearch from "./timetable-sidebar-search.vue";
 import { getCommon } from "@/utils";
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
 const props = defineProps<{ common: ReturnType<typeof getCommon> }>();
 const activeSection = ref<string | null>(null);
