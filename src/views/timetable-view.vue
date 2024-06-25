@@ -6,6 +6,7 @@ import { getCommon } from "@/utils";
 import TimetableSidebar from "@/components/timetable-sidebar.vue";
 import TimetableInfoBanner from "@/components/timetable-info-banner.vue";
 import TimetableHeader from "@/components/timetable-header.vue";
+import UnitTimetable from "@/components/unit-timetable.vue";
 import { useRouter } from "vue-router";
 
 type PropsUnit = {
@@ -130,18 +131,18 @@ function getUnitPathName(unitType: "o" | "n" | "s" | "u") {
 </script>
 
 <template>
-  <template v-if="!error && school && currentUnit && version_">
-    <timetable-sidebar
-      v-if="common"
-      :common="common"
-      :version="version_"
-      :school="school"
-    />
+  <template v-if="!error && school && currentUnit && version_ && common">
+    <timetable-sidebar :common="common" :version="version_" :school="school" />
     <div class="p-7 w-full max-w-screen-2xl mx-auto">
       <timetable-header
         :unit="currentUnit"
         :version="version_"
         :school="school"
+      />
+      <unit-timetable
+        :unit="currentUnit"
+        :version="version_"
+        :common="common"
       />
       <timetable-info-banner :version="version_" />
     </div>
