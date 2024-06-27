@@ -70,9 +70,9 @@ function getLessons() {
     style="column-gap: 1px"
     v-if="lessons"
   >
-    <div class="border-b bg-white dark:bg-gray-900 dark:border-gray-700" />
+    <div class="border-b bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0" />
     <div
-      class="border-b text-center font-medium p-3 bg-white dark:bg-gray-900 dark:border-gray-700"
+      class="border-b text-center font-medium p-3 bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0"
       v-for="(day, dayIndex) in [...common.days.values()]"
       :key="dayIndex"
     >
