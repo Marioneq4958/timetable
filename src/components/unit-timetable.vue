@@ -53,7 +53,9 @@ function getLessons() {
     }
     if (isUnitLesson) l.get(lesson.timeSlotId)!.get(lesson.dayId)!.push(lesson);
   });
-  lessons.value = [...l.values()].map((timeSlot) => [...timeSlot.values()]);
+  lessons.value = [...l.values()]
+    .filter((timeSlot) => [...timeSlot.values()].find((day) => day.length))
+    .map((timeSlot) => [...timeSlot.values()]);
 }
 </script>
 
