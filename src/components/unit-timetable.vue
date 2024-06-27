@@ -81,9 +81,9 @@ function getLessons() {
     </div>
     <template v-for="(ts, tsIndex) in lessons" :key="tsIndex">
       <div
-        class="bg-white dark:bg-gray-900 flex items-center justify-center flex-col py-2 px-4"
+        class="bg-white dark:bg-gray-900 flex items-center justify-center flex-col py-2 px-4 gap-0.5"
       >
-        <div class="text-sm text-gray-800 dark:text-gray-200">
+        <div class="text-xs text-gray-800 dark:text-gray-200">
           {{
             getTimeSlotTime([...common.timeSlots.values()][tsIndex].beginMinute)
           }}
@@ -91,7 +91,7 @@ function getLessons() {
         <div class="font-medium">
           {{ [...common.timeSlots.values()][tsIndex].short }}
         </div>
-        <div class="text-sm text-gray-800 dark:text-gray-200">
+        <div class="text-xs text-gray-800 dark:text-gray-200">
           {{
             getTimeSlotTime([...common.timeSlots.values()][tsIndex].endMinute)
           }}

@@ -133,7 +133,7 @@ function getUnitPathName(unitType: "o" | "n" | "s" | "u") {
 <template>
   <template v-if="!error && school && currentUnit && version_ && common">
     <timetable-sidebar :common="common" :version="version_" :school="school" />
-    <div class="p-7 w-full max-w-screen-2xl mx-auto">
+    <div class="p-4 lg:p-7 w-full max-w-screen-2xl mx-auto">
       <timetable-header
         :unit="currentUnit"
         :version="version_"

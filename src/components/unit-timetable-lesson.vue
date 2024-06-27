@@ -52,7 +52,13 @@ function getTileClasses() {
     .join(", ");
 }
 
-function getTileTeachers() {
+function getTileTeachersLong() {
+  return teachers.value
+    .map((teacher) => teacher.fullName ?? teacher.short ?? teacher.name)
+    .join(", ");
+}
+
+function getTileTeachersShort() {
   return teachers.value
     .map((teacher) => teacher.short ?? teacher.name ?? teacher.fullName)
     .join(", ");
@@ -69,21 +75,24 @@ function getTileRooms() {
   <div
     class="bg-green-50 border-l-4 border-green-800 rounded-r-md px-2.5 py-2 flex-1 dark:bg-green-950 dark:border-green-400"
   >
-    <div v-if="subject" class="font-semibold text-sm">
-      {{ subject.name ?? subject.short }}
-      <template v-if="unit.type === 'o' && getClassGroup(unit.data.id)">
+    <div class="font-semibold text-sm">
+      {{ subject?.name ?? subject?.short ?? lesson.comment }}
+      <template
+        v-if="subject && unit.type === 'o' && getClassGroup(unit.data.id)"
+      >
         ({{ getClassGroup(unit.data.id) }})
       </template>
     </div>
-    <div>
+    <div class="text-sm" v-if="subject">
       <template v-if="unit.type === 's' || unit.type === 'n'">
         {{ getTileClasses() }} &bullet;
       </template>
       <template
         v-if="unit.type === 'o' || unit.type === 's' || unit.type === 'u'"
       >
-        {{ getTileTeachers() }}
-        <template v-if="unit.type !== 's'">&bullet; </template>
+        <span class="2xl:hidden">{{ getTileTeachersShort() }}</span>
+        <span class="hidden 2xl:inline">{{ getTileTeachersLong() }}</span>
+        <template v-if="unit.type !== 's'"> &bullet; </template>
       </template>
       <template
         v-if="unit.type === 'o' || unit.type === 'n' || unit.type === 'u'"
