@@ -60,6 +60,7 @@ function getLessons() {
 </script>
 
 <template>
+  <!-- sticky doesn't work with overflow: hidden, so used is contain: paint -->
   <div
     class="grid mt-5 border rounded-md bg-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
     :style="{
@@ -67,7 +68,7 @@ function getLessons() {
         [...common.days.values()].length
       }, 1fr)`,
     }"
-    style="column-gap: 1px"
+    style="column-gap: 1px; contain: paint;"
     v-if="lessons"
   >
     <div class="border-b bg-white dark:bg-gray-900 dark:border-gray-700 sticky top-0" />
