@@ -87,3 +87,9 @@ export function getCommon(version: TimetableVersionData) {
     students,
   };
 }
+
+export function getTimeSlotTime(minutes: number) {
+  return `${Math.trunc(minutes / 60)}:${(
+    `00` + (minutes % 60).toString()
+  ).slice(-2)}`;
+}

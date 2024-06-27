@@ -1,7 +1,8 @@
 <script setup lang="ts">
+import UnitTimetableLesson from "./unit-timetable-lesson.vue";
 import type { TimetableVersion, TimetableUnit, TimetableLesson } from "@/types";
-import { getCommon } from "@/utils";
-import { onMounted, ref } from "vue";
+import { getCommon, getTimeSlotTime } from "@/utils";
+import { onMounted, ref, watch } from "vue";
 
 const props = defineProps<{
   common: ReturnType<typeof getCommon>;
@@ -14,6 +15,12 @@ const lessons = ref<TimetableLesson[][][] | null>(null);
 onMounted(() => {
   getLessons();
 });
+watch(
+  () => props.unit,
+  () => {
+    getLessons();
+  }
+);
 
 // TODO: Edupage - weeks
 function getLessons() {
@@ -52,7 +59,7 @@ function getLessons() {
 
 <template>
   <div
-    class="grid mt-5 border rounded-md bg-gray-200"
+    class="grid mt-5 border rounded-md bg-gray-200 dark:bg-gray-800 dark:border-gray-700 dark:text-white"
     :style="{
       'grid-template-columns': `min-content repeat(${
         [...common.days.values()].length
@@ -61,9 +68,9 @@ function getLessons() {
     style="column-gap: 1px"
     v-if="lessons"
   >
-    <div class="border-b bg-white" />
+    <div class="border-b bg-white dark:bg-gray-900 dark:border-gray-700" />
     <div
-      class="border-b text-center font-medium p-3 bg-white"
+      class="border-b text-center font-medium p-3 bg-white dark:bg-gray-900 dark:border-gray-700"
       v-for="(day, dayIndex) in [...common.days.values()]"
       :key="dayIndex"
     >
@@ -71,30 +78,42 @@ function getLessons() {
     </div>
     <template v-for="(ts, tsIndex) in lessons" :key="tsIndex">
       <div
-        class="bg-white flex items-center justify-center flex-col py-2 px-4 gap-1"
+        class="bg-white dark:bg-gray-900 flex items-center justify-center flex-col py-2 px-4"
       >
-        <div class="text-sm text-gray-800">
-          {{ [...common.timeSlots.values()][tsIndex].beginMinute }}
+        <div class="text-sm text-gray-800 dark:text-gray-200">
+          {{
+            getTimeSlotTime([...common.timeSlots.values()][tsIndex].beginMinute)
+          }}
         </div>
         <div class="font-medium">
           {{ [...common.timeSlots.values()][tsIndex].short }}
         </div>
-        <div class="text-sm text-gray-800">
-          {{ [...common.timeSlots.values()][tsIndex].endMinute }}
+        <div class="text-sm text-gray-800 dark:text-gray-200">
+          {{
+            getTimeSlotTime([...common.timeSlots.values()][tsIndex].endMinute)
+          }}
         </div>
       </div>
-      <div class="bg-white" v-for="(tsDay, tsDayIndex) in ts" :key="tsDayIndex">
-        <div v-for="(lesson, lessonIndex) in tsDay" :key="lessonIndex">
-          Grupa seminarna: {{ lesson.seminarGroup }}<br />
-          Uczniowie: {{ lesson.studentIds }}<br />
-          Przedmiot: {{ lesson.subjectId }}<br />
-          Nauczciele: {{ lesson.teacherIds }}<br />
-          Sale: {{ lesson.roomIds }}<br />
-          Oddziały: {{ lesson.classIds }}<br />
-          Grupy: {{ lesson.groupIds }}<br />
-          Grupa międzyoddziałowa: {{ lesson.interclassGroupId }}<br />
-          Komentarz: {{ lesson.comment }}
+      <div
+        class="bg-white dark:bg-gray-900 p-2 flex flex-col"
+        v-for="(tsDay, tsDayIndex) in ts"
+        :key="tsDayIndex"
+      >
+        <div
+          v-if="tsDay.length > 1"
+          class="flex justify-center items-center border rounded-md text-sm flex-1 p-1 dark:border-gray-700"
+        >
+          <div>
+            <span class="font-semibold">{{ tsDay.length }}</span>
+            {{ tsDay.length > 4 ? "grup" : "grupy" }}
+          </div>
         </div>
+        <unit-timetable-lesson
+          v-else-if="tsDay.length"
+          :lesson="tsDay[0]"
+          :common="common"
+          :unit="unit"
+        />
       </div>
     </template>
   </div>
