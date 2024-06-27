@@ -101,7 +101,7 @@ const favourite = computed(() => [
         icon="groups"
         v-if="[...props.common.students.values()].length"
         :isActive="activeSection === 'students'"
-        :units="[...props.common.students.values()].map(unit => ({ id: unit.id, name: (unit.name || unit.short)!, typePath: 'nauczyciele' }))"
+        :units="[...props.common.students.values()].map(unit => ({ id: unit.id, name: (unit.name || unit.short)!, typePath: 'uczniowie' }))"
         @section-click="handleSectionClick('students')"
       />
       <sidebar-section
@@ -109,7 +109,7 @@ const favourite = computed(() => [
         section-id="teachers"
         icon="groups"
         :isActive="activeSection === 'teachers'"
-        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'sale' }))"
+        :units="[...props.common.teachers.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'nauczyciele' }))"
         @section-click="handleSectionClick('teachers')"
       />
       <sidebar-section
@@ -117,7 +117,7 @@ const favourite = computed(() => [
         section-id="rooms"
         icon="meeting_room"
         :isActive="activeSection === 'rooms'"
-        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'nauczyciele' }))"
+        :units="[...props.common.rooms.values()].map(unit => ({ id: unit.id, name: (unit.fullName ?? unit.short)!, typePath: 'sale' }))"
         @section-click="handleSectionClick('rooms')"
       />
     </ul>
