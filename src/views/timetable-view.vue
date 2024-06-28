@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import type { School, TimetableUnit, TimetableVersion, TimetableVersionData } from "@/types";
+import type {
+  School,
+  TimetableUnit,
+  TimetableVersion,
+  TimetableVersionData,
+} from "@/types";
 import { getVersion, getSchoolById } from "@/api/client";
 import { getCommon } from "@/utils";
 import TimetableSidebar from "@/components/timetable-sidebar.vue";
@@ -165,6 +170,16 @@ function getUnitPathName(unitType: "o" | "n" | "s" | "u") {
       <timetable-info-banner :version="version_" />
     </div>
   </template>
+  <div
+    v-if="loading"
+    class="h-screen w-screen flex items-center justify-center"
+  >
+    <div class="spinner stroke-gray-900 dark:stroke-gray-100" v-if="loading">
+      <svg viewBox="0 0 100 100">
+        <circle cx="50" cy="50" r="20" />
+      </svg>
+    </div>
+  </div>
   <template v-else>
     <p v-if="error === 'no-versions'">
       Nie znaleziono żadnych planów tej szkoły
