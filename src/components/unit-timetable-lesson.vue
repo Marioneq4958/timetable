@@ -84,20 +84,24 @@ function getTileRooms() {
       </template>
     </div>
     <div class="text-sm" v-if="subject">
+      <template
+        v-if="unit.type === 'o' || unit.type === 'n' || unit.type === 'u'"
+      >
+        {{ getTileRooms() }} &bullet;
+      </template>
       <template v-if="unit.type === 's' || unit.type === 'n'">
-        {{ getTileClasses() }} &bullet;
+        {{ getTileClasses() }}
+        <template v-if="unit.type === 's'"> &bullet; </template>
       </template>
       <template
         v-if="unit.type === 'o' || unit.type === 's' || unit.type === 'u'"
       >
-        <span class="2xl:hidden">{{ getTileTeachersShort() }}</span>
-        <span class="hidden 2xl:inline">{{ getTileTeachersLong() }}</span>
-        <template v-if="unit.type !== 's'"> &bullet; </template>
-      </template>
-      <template
-        v-if="unit.type === 'o' || unit.type === 'n' || unit.type === 'u'"
-      >
-        {{ getTileRooms() }}
+        <span class="2xl:hidden" :class="{ hidden: teachers.length > 1 }">{{
+          getTileTeachersShort()
+        }}</span>
+        <span class="hidden" :class="{ '2xl:inline': teachers.length === 1 }">{{
+          getTileTeachersLong()
+        }}</span>
       </template>
     </div>
   </div>

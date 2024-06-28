@@ -72,7 +72,7 @@ function handleInputFocus() {
         <ul class="mt-2">
           <li v-for="(class_, index) in result.classes" :key="index">
             <router-link
-              :to="`../oddzialy/${class_.id}`"
+              :to="`../oddzialy/${encodeURIComponent(class_.id)}`"
               class="block px-3 py-1.5 text-gray-700 hover:text-gray-900 rounded-md transition-all text-ellipsis whitespace-nowrap overflow-hidden text-[15px] dark:text-gray-300 dark:hover:text-gray-100"
               activeClass="bg-gray-100 dark:bg-gray-800"
               >{{ class_.fullName ?? class_.short }}
@@ -87,7 +87,7 @@ function handleInputFocus() {
         <ul class="mt-2">
           <li v-for="(teacher, index) in result.teachers" :key="index">
             <router-link
-              :to="`../nauczyciele/${teacher.id}`"
+              :to="`../nauczyciele/${encodeURIComponent(teacher.id)}`"
               class="block px-3 py-1.5 text-gray-700 hover:text-gray-900 rounded-md transition-all text-ellipsis whitespace-nowrap overflow-hidden text-[15px] dark:text-gray-300 dark:hover:text-gray-100"
               activeClass="bg-gray-100 dark:bg-gray-800"
               >{{ teacher.fullName ?? teacher.short }}
@@ -100,7 +100,7 @@ function handleInputFocus() {
         <ul class="mt-2">
           <li v-for="(room, index) in result.rooms" :key="index">
             <router-link
-              :to="`../sale/${room.id}`"
+              :to="`../sale/${encodeURIComponent(room.id)}`"
               class="block px-3 py-1.5 text-gray-700 hover:text-gray-900 rounded-md transition-all text-ellipsis whitespace-nowrap overflow-hidden text-[15px] dark:text-gray-300 dark:hover:text-gray-100"
               activeClass="bg-gray-100 dark:bg-gray-800"
               >{{ room.fullName ?? room.short }}
@@ -113,7 +113,7 @@ function handleInputFocus() {
         <ul class="mt-2">
           <li v-for="(student, index) in result.students" :key="index">
             <router-link
-              :to="`../uczniowie/${student.id}`"
+              :to="`../uczniowie/${encodeURIComponent(student.id)}`"
               class="block px-3 py-1.5 text-gray-700 hover:text-gray-900 rounded-md transition-all text-ellipsis whitespace-nowrap overflow-hidden text-[15px] dark:text-gray-300 dark:hover:text-gray-100"
               activeClass="bg-gray-100  dark:bg-gray-800"
               >{{ student.short }}

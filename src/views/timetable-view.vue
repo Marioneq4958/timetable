@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from "vue";
-import type { School, TimetableUnit, TimetableVersion } from "@/types";
+import type { School, TimetableUnit, TimetableVersion, TimetableVersionData } from "@/types";
 import { getVersion, getSchoolById } from "@/api/client";
 import { getCommon } from "@/utils";
 import TimetableSidebar from "@/components/timetable-sidebar.vue";
@@ -8,6 +8,7 @@ import TimetableInfoBanner from "@/components/timetable-info-banner.vue";
 import TimetableHeader from "@/components/timetable-header.vue";
 import UnitTimetable from "@/components/unit-timetable.vue";
 import { useRouter } from "vue-router";
+import { db } from "@/database";
 
 type PropsUnit = {
   typeName: "oddzialy" | "nauczyciele" | "sale" | "uczniowie";
@@ -40,6 +41,23 @@ watch(
 
 onMounted(async () => await loadData());
 
+async function getVersionData(
+  schoolId: number,
+  versionType: "optivum",
+  versionId: string
+) {
+  const dbResult = await db.versions.get(
+    `${schoolId}/${versionType}/${versionId}`
+  );
+  if (dbResult) return JSON.parse(dbResult.data) as TimetableVersionData;
+  const versionData = await getVersion(schoolId, versionType, versionId);
+  await db.versions.add({
+    id: `${schoolId}/${versionType}/${versionId}`,
+    data: JSON.stringify(versionData),
+  });
+  return versionData;
+}
+
 async function loadData() {
   loading.value = true;
   error.value = null;
@@ -62,8 +80,8 @@ async function loadData() {
       school.value.optivum_versions.find(
         (v) => `${v.generated_on}/${v.discriminant}` === props.version?.id
       ) ?? school.value.optivum_versions[0];
-    const versionData = await getVersion(
-      school.value.rspo_id,
+    const versionData = await getVersionData(
+      props.schoolId,
       "optivum",
       `${v.generated_on}/${v.discriminant}`
     );

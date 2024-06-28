@@ -72,7 +72,7 @@ const favourite = computed(() => [
 
 <template>
   <div
-    class="h-screen bg-white dark:bg-gray-900 w-80 flex flex-col border-r dark:border-gray-700 border-gray-200 overflow-y-auto sticky top-0 left-0"
+    class="h-screen bg-white dark:bg-gray-900 w-72 flex flex-col border-r dark:border-gray-700 border-gray-200 overflow-y-auto sticky top-0 left-0"
   >
     <div class="px-5 pt-4 pb-2">
       <sidebar-search :common="common" />
