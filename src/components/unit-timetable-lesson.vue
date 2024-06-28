@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { TimetableCommonGroup, TimetableLesson } from "@/types";
+import type { TimetableLesson, TimetableUnit } from "@/types";
 import { getCommon } from "@/utils";
 import { computed } from "vue";
 
