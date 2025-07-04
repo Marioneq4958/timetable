@@ -1,227 +1,172 @@
-<template>
-  <q-layout view="hHh LpR lfr">
-    <q-header
-      v-touch-swipe.horizontal="onOffsetSwipe"
-      class="bg-page text-page"
-    >
-      <q-toolbar>
-        <back-button
-          aria-label="Wróć do listy"
-          :to="backTo"
-        />
+<script setup lang="ts">
+import { SchoolNotFoundError } from '@/api/errors';
+import { useTimetableStore } from '@/stores/timetable.store';
+import {
+  LucideAlertCircle,
+  LucideArrowLeft,
+  LucideCalendarOff,
+  LucideLoader2,
+  LucideRotateCw,
+} from 'lucide-vue-next';
+import { ref, watch } from 'vue';
+import { RouterLink, useRoute, useRouter } from 'vue-router';
+import { Button } from '@/components/ui/button';
+import TimetableTopBar from '@/components/TimetableTopBar.vue';
+import { useMediaQuery } from '@vueuse/core';
+import TimetableSidebar from '@/components/TimetableSidebar.vue';
+import TimetableDrawer from '@/components/TimetableDrawer.vue';
+import { toast } from 'vue-sonner';
+import TimetableBackgroundSync from '@/components/TimetableBackgroundSync.vue';
 
-        <q-toolbar-title class="col-grow">
-          <q-skeleton
-            v-if="title === null"
-            type="text"
-            width="35px"
-          />
-          <template v-else>
-            {{ title }}
-          </template>
-        </q-toolbar-title>
+const props = defineProps<{
+  schoolId: number;
+  versionId?: string;
+}>();
 
-        <template v-if="!offset.const">
-          <q-btn
-            ref="offsetDownButton"
-            icon="navigate_before"
-            flat
-            round
-            :color="offset.decreaseDisabled ? 'grey' : 'primary'"
-            :disable="offset.decreaseDisabled"
-            :dense="$q.screen.lt.sm"
-            aria-label="Poprzedni tydzień"
-            @click="changeOffset(-1)"
-          />
-          <q-btn
-            :color="offset.isCurrentWeek ? 'grey' : 'primary'"
-            outline
-            class="q-mx-xs"
-            :disable="offset.isCurrentWeek"
-            :dense="$q.screen.lt.sm"
-            aria-label="Dzisiaj - przywróć obecny tydzień"
-            @click="offset.reset()"
-          >
-            Dzisiaj
-          </q-btn>
-          <q-btn
-            ref="offsetUpButton"
-            icon="navigate_next"
-            flat
-            round
-            :color="offset.increaseDisabled ? 'grey' : 'primary'"
-            :disable="offset.increaseDisabled"
-            :dense="$q.screen.lt.sm"
-            aria-label="Następny tydzień"
-            @click="changeOffset(1)"
-          />
-        </template>
-        <q-btn
-          icon="more_vert"
-          flat
-          round
-          class="q-ml-xs"
-          :dense="$q.screen.lt.sm"
-          aria-label="Więcej opcji"
-        >
-          <q-menu>
-            <q-card class="timetable-layout__menu">
-              <q-list>
-                <slot name="menu" />
-                <q-item
-                  clickable
-                  class="non-selectable standalone"
-                  @click="$emit('startupToggle')"
-                >
-                  <q-item-section side>
-                    <q-icon
-                      name="bolt"
-                      :color="isStartup ? 'primary' : undefined"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    <q-item-label>Otwieraj przy starcie</q-item-label>
-                    <q-item-label
-                      v-if="isStartup"
-                      caption
-                      class="text-primary"
-                    >
-                      Włączono
-                    </q-item-label>
-                  </q-item-section>
-                </q-item>
-                <q-item
-                  clickable
-                  class="non-selectable"
-                  @click="onColorsToggle"
-                >
-                  <q-item-section side>
-                    <q-icon
-                      :name="showColors ? 'palette' : 'o_palette'"
-                      :color="showColors ? 'primary' : undefined"
-                    />
-                  </q-item-section>
-                  <q-item-section>
-                    {{ showColors ? 'Wyłącz kolory' : 'Włącz kolory' }}
-                  </q-item-section>
-                </q-item>
-                <q-separator />
-                <q-item>
-                  <q-item-section>
-                    <theme-picker />
-                  </q-item-section>
-                </q-item>
-              </q-list>
-            </q-card>
-          </q-menu>
-        </q-btn>
-      </q-toolbar>
-      <div>
-        <slot name="tabs" />
-      </div>
-    </q-header>
+const timetableStore = useTimetableStore();
+const router = useRouter();
+const route = useRoute();
 
-    <q-page-container>
-      <q-page
-        v-if="!hasData"
-        padding
-        class="column content-center justify-center"
-      >
-        <template v-if="errorMessage !== null">
-          <div class="text-center">
-            {{ errorMessage }}
-          </div>
-          <q-btn
-            color="primary"
-            class="q-mt-md"
-            @click="$emit('retryLoad')"
-          >
-            Spróbuj ponownie
-          </q-btn>
-        </template>
-        <q-spinner
-          v-else
-          color="primary"
-          size="64px"
-        />
-      </q-page>
-      <q-page
-        v-else
-        :style-fn="styleFn"
-        class="overflow-hidden"
-      >
-        <slot :change-offset="changeOffset" />
-      </q-page>
-      <q-linear-progress
-        v-if="isLoading"
-        indeterminate
-        color="primary"
-        class="timetable-layout__progress"
-      />
-    </q-page-container>
-  </q-layout>
-</template>
+const error = ref<string | null>(null);
 
-<script lang="ts" setup>
-import { computed, ref } from 'vue';
-import { Offset, shake } from 'src/shared';
-import { QBtn } from 'quasar';
-import { useConfigStore } from 'stores/config';
-import ThemePicker from 'components/ThemePicker.vue';
-import { useNavigation } from 'src/router/navigation';
-import BackButton from 'components/BackButton.vue';
+async function runSync({ forceSync }: { forceSync?: boolean }) {
+  error.value = null;
+  try {
+    await timetableStore.sync({ schoolId: props.schoolId, versionId: props.versionId, forceSync });
+  } catch (reason) {
+    console.log(reason);
+    if (reason instanceof SchoolNotFoundError) error.value = 'school-not-found';
+    else error.value = 'unknown-error';
+    if (timetableStore.preparedVersionData)
+      toast.error('Wystąpił błąd podczas synchornizacji', {
+        description: 'Spróbuj ponownie później',
+        action: {
+          label: 'Spróbuj ponownie',
+          onClick: async () => { await runSync({ forceSync: true }) },
+        },
+      });
+  }
+}
 
-const props = withDefaults(defineProps<{
-  title?: string | null;
-  hasData?: boolean;
-  isLoading?: boolean;
-  errorMessage?: string | null;
-  offset: Offset;
-  isStartup?: boolean;
-}>(), {
-  title: null,
-  errorMessage: null,
-});
+watch(
+  () => [props.schoolId, props.versionId],
+  async () => await runSync({}),
+  { immediate: true },
+);
 
-defineEmits(['retryLoad', 'startupToggle']);
+watch(
+  () => [timetableStore.school, timetableStore.currentVersion, timetableStore.preparedVersionData],
+  async () => {
+    if (
+      !timetableStore.school ||
+      !timetableStore.currentVersion ||
+      !timetableStore.preparedVersionData
+    )
+      return;
+    const [versionType, versionId] = timetableStore.currentVersion.id.split('/');
+    await router.replace({
+      name: route.name === 'timetable' ? 'timetable:version' : route.name,
+      params: { ...route.params, schoolId: timetableStore.school.rspoId, versionId, versionType },
+    });
+    if (route.name === 'timetable:version')
+      await router.replace({
+        name: 'timetable:unit',
+        params: {
+          ...route.params,
+          unitTypeSlug: 'oddzial',
+          unitId: [...timetableStore.preparedVersionData.common.classes.values()][0].id,
+        },
+      });
+  },
+  {
+    immediate: true,
+  },
+);
 
-export type ChangeOffsetFn = (change: -1|1) => boolean;
-
-const config = useConfigStore();
-const navigation = useNavigation();
-
-const offsetDownButton = ref<QBtn>();
-const offsetUpButton = ref<QBtn>();
-
-const changeOffset = (direction: -1|1) => {
-  if (props.offset === null) return false;
-  if (!props.offset.change(direction)) return false;
-  if (direction === -1 && offsetDownButton.value) shake(offsetDownButton.value.$el, false);
-  if (direction === 1 && offsetUpButton.value) shake(offsetUpButton.value.$el, true);
-  return false;
-};
-
-// TODO: Use dynamic back text
-const backTo = computed(() => navigation.currentUnitList ?? navigation.triRelative.school);
-const onOffsetSwipe = (event: { direction: 'left' | 'right' }) => {
-  if (event.direction === 'right') changeOffset(-1);
-  if (event.direction === 'left') changeOffset(1);
-};
-const styleFn = (topMargin: number, height: number) => ({ height: `${height - topMargin}px` });
-const showColors = computed(() => config.showColors);
-const onColorsToggle = () => {
-  config.toggleColors();
-};
+const useDrawer = useMediaQuery('(width < 48rem)');
 </script>
 
-<style lang="scss">
-.timetable-layout__menu {
-  min-width: 220px;
-}
+<template>
+  <div
+    v-if="
+      timetableStore.school &&
+      timetableStore.avaliableVersions &&
+      timetableStore.currentVersion &&
+      timetableStore.preparedVersionData &&
+      props.versionId === timetableStore.currentVersion.id &&
+      props.schoolId === timetableStore.school.rspoId
+    "
+    class="flex bg-accent/20 min-h-dvh"
+  >
+    <TimetableSidebar v-if="!useDrawer" />
+    <div class="flex-1 mx-auto max-w-screen-xl w-full mb-[120px] md:mb-0">
+      <TimetableDrawer v-if="useDrawer" />
+      <TimetableTopBar />
+      <RouterView />
+    </div>
+    <TimetableBackgroundSync v-if="timetableStore.isLoading" />
+  </div>
 
-.timetable-layout__progress {
-  position: fixed;
-  bottom: 0;
-  z-index: 50;
-}
-</style>
+  <div
+    v-else
+    class="w-screen min-h-dvh flex flex-col items-center justify-center p-10 text-center"
+  >
+    <LucideLoader2
+      v-if="timetableStore.isLoading && !timetableStore.currentVersion"
+      :size="30"
+      class="animate-spin"
+    />
+    <template v-else-if="error === 'school-not-found'">
+      <LucideAlertCircle :size="96" />
+      <p class="mt-5 text-xl font-semibold">
+        Nie znaleziono szkoły o numerze <code class="font-mono">{{ props.schoolId }}</code>
+      </p>
+      <Button as-child size="lg" variant="outline">
+        <RouterLink :to="{ name: 'home' }" class="mt-5">
+          <LucideArrowLeft class="mr-2" />
+          Wróć
+        </RouterLink>
+      </Button>
+    </template>
+    <template
+      v-else-if="
+        !timetableStore.isLoading &&
+        !error &&
+        timetableStore.school &&
+        timetableStore.avaliableVersions?.length === 0
+      "
+    >
+      <LucideCalendarOff :size="96" />
+      <p class="mt-5 text-xl font-semibold">Nie znaleźliśmy żadnych planów tej szkoły :(</p>
+      <!-- TODO: More information -->
+      <p class="mt-2 text-sm text-muted-foreground">
+        {{ timetableStore.school.name }}, {{ timetableStore.school.addressTown }}
+        {{ timetableStore.school.addressZipCode }}
+      </p>
+      <Button as-child size="lg" variant="outline">
+        <RouterLink :to="{ name: 'home' }" class="mt-5">
+          <LucideArrowLeft class="mr-2" />
+          Wróć
+        </RouterLink>
+      </Button>
+    </template>
+    <template v-else>
+      <LucideAlertCircle :size="96" />
+      <p class="mt-5 text-xl font-semibold">
+        Wystąpił nieoczekiwany błąd, spróbuj ponownie później
+      </p>
+      <div class="flex gap-3 mt-5">
+        <Button size="lg" @click="runSync">
+          <LucideRotateCw class="mr-2" />
+          Spróbuj ponownie
+        </Button>
+        <Button as-child size="lg" variant="outline">
+          <RouterLink :to="{ name: 'home' }">
+            <LucideArrowLeft class="mr-2" />
+            Wróć
+          </RouterLink>
+        </Button>
+      </div>
+    </template>
+  </div>
+</template>

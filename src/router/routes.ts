@@ -1,87 +1,56 @@
-import { RouteRecordRaw } from 'vue-router';
-import { useConfigStore } from 'stores/config';
-import { paths } from 'src/router/path-builder';
-import { paramNames, triParam } from './route-constants';
-
-const getSchoolLayout = () => import('layouts/SchoolLayout.vue');
+import type { RouteRecordRaw } from 'vue-router';
 
 const routes: RouteRecordRaw[] = [
   {
-    path: '/timetable/:catchAll(.*)*',
-    redirect: (route) => {
-      let parts = route.params.catchAll;
-      if (typeof parts !== 'string') parts = parts.join('/');
-      return ({
-        path: `/${parts}`,
-      });
-    },
+    name: 'home',
+    path: '/',
+    component: () => import('@/views/HomeView.vue'),
   },
   {
-    path: '/',
-    component: () => import('layouts/MainLayout.vue'),
+    name: 'intro',
+    path: '/intro',
+    component: () => import('@/views/IntroView.vue')
+  },
+  {
+    name: 'schools-map',
+    path: '/mapa-szkol/:schoolId(\\d+)?',
+    props: (route) => ({
+      schoolId: route.params.schoolId ? Number(route.params.schoolId) : undefined,
+    }),
+    component: () => import('@/views/SchoolsMapView.vue'),
+  },
+  {
+    name: 'timetable',
+    path: '/plan/:schoolId(\\d+)',
+    component: () => import('@/layouts/TimetableLayout.vue'),
+    props: (route) => ({
+      schoolId: Number(route.params.schoolId),
+    }),
+  },
+  {
+    name: 'timetable:version',
+    path: '/plan/:schoolId(\\d+)/:versionType(optivum|edupage)/:versionId(\\d+)',
+    component: () => import('@/layouts/TimetableLayout.vue'),
+    props: (route) => ({
+      schoolId: Number(route.params.schoolId),
+      versionId: `${route.params.versionType}/${route.params.versionId}`,
+    }),
     children: [
       {
-        path: '',
-        component: () => import('pages/IndexPage.vue'),
-        meta: {
-          backTo: null,
-        },
-      },
-      {
-        path: `:${paramNames.tri}(v-lo)/map`,
-        component: () => import('pages/VLoMapPage.vue'),
-        meta: {
-          title: 'Mapa pomieszczeń',
-          backTo: paths.tri('v-lo').school,
-        },
-      },
-      {
-        path: 'super-secret-settings',
-        component: () => import('pages/SuperSecretSettings.vue'),
-        meta: {
-          title: 'Super Secret Settings',
-          backTo: paths.home,
-        },
+        name: 'timetable:unit',
+        path: '/plan/:schoolId(\\d+)/:versionType(optivum|edupage)/:versionId(\\d+)/:unitTypeSlug(oddzial|nauczyciel|sala|uczen)/:unitId',
+        component: () => import('@/views/UnitTimetableView.vue'),
+        props: (route) => ({
+          ...route.params,
+          unitType: route.params.unitTypeSlug ? route.params.unitTypeSlug[0] : undefined,
+        }),
       },
     ],
   },
   {
-    path: `/:${paramNames.tri}/`,
-    redirect: (location) => paths
-      .tri(location.params[paramNames.tri] as string)
-      .class.list,
-  },
-  {
-    path: `/:${paramNames.tri}/:${paramNames.unitType}(class|teacher|room)/`,
-    component: getSchoolLayout,
-  },
-  {
-    path: `/${triParam}/:${paramNames.unitType}(class|teacher|room)/:${paramNames.unit}`,
-    component: () => import('pages/UnitTimetable.vue'),
-  },
-  {
-    path: `/${triParam}/combined`,
-    component: () => import('pages/CombinedTimetable.vue'),
-  },
-  {
-    path: '/13c',
-    alias: '/13C',
-    component: () => import('pages/CampaignPage.vue'),
-  },
-  {
-    path: '/pwa-home',
-    redirect: () => {
-      const config = useConfigStore();
-
-      if (config.startupUnit === null) return paths.home;
-      const base = paths.tri(config.startupUnit.tri);
-      if (config.startupUnit.unitType === 'combined') return base.combined;
-      return base.unitType(config.startupUnit.unitType).id(config.startupUnit.unit);
-    },
-  },
-  {
-    path: '/:catchAll(.*)*',
-    component: () => import('pages/ErrorNotFound.vue'),
+    name: 'not-found',
+    path: '/:pathMatch(.*)',
+    component: () => import('@/views/NotFoundView.vue'),
   },
 ];
 

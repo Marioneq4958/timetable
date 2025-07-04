@@ -1,7 +1,17 @@
 {
-  "extends": "@quasar/app-webpack/tsconfig-preset",
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.node.json"
+    },
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ],
   "compilerOptions": {
     "baseUrl": ".",
-    "lib": ["es2021", "dom", "webworker"],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
   }
 }
