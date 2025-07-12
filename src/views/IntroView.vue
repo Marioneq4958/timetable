@@ -19,7 +19,7 @@ import { LucideChevronRight } from 'lucide-vue-next';
         Plan lekcji w jednym miejscu
       </h1>
       <p class="text-lg text-accent-foreground/80">
-        Otwarto źródłowa aplikacja do planu lekcji w twojej szkole, działa w trybie offline.
+        Otwartoźródłowa aplikacja do planu lekcji w twojej szkole, działa w trybie offline.
       </p>
       <Button size="lg" class="my-4" as-child>
         <RouterLink :to="{ name: 'schools-map' }">Rozpocznij <LucideChevronRight /></RouterLink>
