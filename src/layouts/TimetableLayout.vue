@@ -34,7 +34,7 @@ async function runSync({ forceSync }: { forceSync?: boolean }) {
   try {
     await timetableStore.sync({ schoolId: props.schoolId, versionId: props.versionId, forceSync });
   } catch (reason) {
-    console.log(reason);
+    console.warn(`An error occurred during synchronization, reason: ${reason}`);
     if (reason instanceof SchoolNotFoundError) error.value = 'school-not-found';
     else error.value = 'unknown-error';
     if (timetableStore.preparedVersionData)
