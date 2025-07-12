@@ -11,6 +11,6 @@ export default {
       .catch((reason) => {
         if (!(reason instanceof AxiosError)) throw new ApiError(reason);
         const message = reason.response?.data.message;
-        throw new ApiError(message);
+        throw new ApiError(message ?? reason.cause?.message ?? 'Unknown error');
       }),
 };

@@ -14,7 +14,7 @@ export default {
           case 'Entity not found':
             throw new TimetableVersionNotFoundError();
           default:
-            throw new ApiError(message);
+            throw new ApiError(message ?? reason.cause?.message ?? 'Unknown error');
         }
       }),
 };
