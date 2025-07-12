@@ -31,7 +31,6 @@ const emit = defineEmits(['close']);
             <dd class="mt-1">
               <a
                 :href="`https://rspo.gov.pl/institutions/${props.school.rspoId}`"
-                target="_blank"
                 class="underline"
               >
                 {{ props.school.rspoId }}
@@ -44,7 +43,6 @@ const emit = defineEmits(['close']);
               <a
                 v-if="props.school.websiteUrl"
                 :href="props.school.websiteUrl"
-                target="_blank"
                 class="underline"
               >
                 {{ props.school.websiteUrl }}
