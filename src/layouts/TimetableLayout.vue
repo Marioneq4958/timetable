@@ -66,19 +66,21 @@ watch(
     )
       return;
     const [versionType, versionId] = timetableStore.currentVersion.id.split('/');
-    await router.replace({
-      name: route.name === 'timetable' ? 'timetable:version' : route.name,
-      params: { ...route.params, schoolId: timetableStore.school.rspoId, versionId, versionType },
-    });
-    if (route.name === 'timetable:version')
+    if (route.name === 'timetable') {
       await router.replace({
         name: 'timetable:unit',
         params: {
-          ...route.params,
+          schoolId: timetableStore.school.rspoId, versionId, versionType,
           unitTypeSlug: 'oddzial',
           unitId: [...timetableStore.preparedVersionData.common.classes.values()][0].id,
         },
       });
+    } else {
+      await router.replace({
+        name: route.name,
+        params: { ...route.params, schoolId: timetableStore.school.rspoId, versionId, versionType },
+      });
+    }
   },
   {
     immediate: true,
@@ -110,12 +112,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
   </div>
 
   <div v-else class="w-screen min-h-dvh flex flex-col items-center justify-center p-10 text-center">
-    <LucideLoader2
-      v-if="timetableStore.isLoading && !timetableStore.currentVersion"
-      :size="30"
-      class="animate-spin"
-    />
-    <template v-else-if="error === 'school-not-found'">
+    <template v-if="error === 'school-not-found'">
       <LucideAlertCircle :size="96" />
       <p class="mt-5 text-xl font-semibold">
         Nie znaleziono szkoły o numerze <code class="font-mono">{{ props.schoolId }}</code>
@@ -149,7 +146,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
         </RouterLink>
       </Button>
     </template>
-    <template v-else>
+    <template v-else-if="!timetableStore.isLoading && !timetableStore.currentVersion">
       <LucideAlertCircle :size="96" />
       <p class="mt-5 text-xl font-semibold">
         Wystąpił nieoczekiwany błąd, spróbuj ponownie później
@@ -167,5 +164,10 @@ const useDrawer = useMediaQuery('(width < 48rem)');
         </Button>
       </div>
     </template>
+    <LucideLoader2
+      v-else
+      :size="30"
+      class="animate-spin"
+    />
   </div>
 </template>

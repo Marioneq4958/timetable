@@ -12,7 +12,7 @@ const recentSchools = useObservable(from(liveQuery(SchoolRepository.getRecentSch
 const router = useRouter();
 
 watch(recentSchools, () => {
-  if (!recentSchools.value?.length) router.replace({ name: 'intro' });
+  if (recentSchools.value?.length === 0) router.replace({ name: 'intro' });
 }, { immediate: true })
 </script>
 
