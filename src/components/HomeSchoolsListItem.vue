@@ -18,7 +18,7 @@ function handleDelete(e: Event) {
   <li>
     <RouterLink
       :to="{ name: 'timetable', params: { schoolId: props.school.rspoId } }"
-      class="flex justify-between px-5 py-3 border-t hover:bg-input/50 transition-all"
+      class="flex justify-between px-5 py-3 border-t hover:bg-input/50 transition-all gap-5"
     >
       <div>
         <div class="font-semibold tracking-tight text-foreground text-[0.9em]">
