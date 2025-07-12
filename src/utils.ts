@@ -1,5 +1,15 @@
 import { computed } from 'vue';
 import type { SchoolEntity } from './db/entities/school.entity';
+import { type ClassValue, clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
+
+/**
+ * Merges class names using `clsx` and `tailwind-merge`. (used by shadcn vue components)
+ */
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
 
 export function getSchoolFullAddress(school: SchoolEntity) {
   let fullAddress = `${school.addressStreet} ${school.addressBuildingNumber}`;
