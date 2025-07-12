@@ -37,8 +37,7 @@ watch(
   <Dialog v-model:open="showDialog" v-if="lessons.length">
     <DialogTrigger as-child>
       <div
-        class="border-r last:border-none px-2 flex max-w-full overflow-hidden min-w-35 snap-start"
-        style="scroll-snap-stop: always"
+        class="border-r last:border-none px-2 flex max-w-full overflow-hidden min-w-35 snap-start snap-always select-none"
       >
         <TimetableUnitTableCellMultiple v-if="props.lessons.length > 1" :lessons="props.lessons" />
         <TimetableUnitTableCellSingle v-else :lesson="props.lessons[0]" />
