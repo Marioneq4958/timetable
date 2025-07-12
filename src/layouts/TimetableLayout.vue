@@ -66,7 +66,7 @@ watch(
     )
       return;
     const [versionType, versionId] = timetableStore.currentVersion.id.split('/');
-    if (route.name === 'timetable') {
+    if (route.name === 'timetable' || route.name === 'timetable:version') {
       await router.replace({
         name: 'timetable:unit',
         params: {

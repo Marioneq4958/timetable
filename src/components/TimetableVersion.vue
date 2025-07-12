@@ -18,6 +18,7 @@ const timetableStore = useTimetableStore();
 
 const currentVersion = notNullableComputed(timetableStore.currentVersion);
 const availableVersions = notNullableComputed(timetableStore.availableVersions);
+const school = notNullableComputed(timetableStore.school);
 </script>
 
 <template>
@@ -45,7 +46,14 @@ const availableVersions = notNullableComputed(timetableStore.availableVersions);
         <ul>
           <li v-for="version in availableVersions" :key="version.id">
             <RouterLink
-              :to="`../../../${version.id}`"
+              :to="{
+                name: 'timetable:version',
+                params: {
+                  schoolId: school.rspoId,
+                  versionId: version.id.split('/')[0],
+                  versionType: version.id.split('/')[1],
+                },
+              }"
               class="flex justify-between items-center px-3.5 py-2 rounded-md hover:bg-input/50 transition-all"
               :class="{ '!bg-primary text-primary-foreground': version.id === currentVersion.id }"
             >
