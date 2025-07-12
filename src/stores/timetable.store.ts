@@ -23,26 +23,34 @@ export const useTimetableStore = defineStore('timetable', () => {
   const toggleMenu = useToggle(showMenu);
 
   const school = ref<SchoolEntity | null>(null);
-  const avaliableVersions = ref<TimetableVersionEntity[] | null>(null);
+  const availableVersions = ref<TimetableVersionEntity[] | null>(null);
   const currentVersion = ref<TimetableVersionEntity | null>(null);
   const preparedVersionData = ref<PreparedTimetableVersionData | null>(null);
 
   // TODO: Sync conflicts
-  async function sync({ schoolId, versionId, forceSync }: { schoolId: number, versionId?: string, forceSync?: boolean }) {
+  async function sync({
+    schoolId,
+    versionId,
+    forceSync,
+  }: {
+    schoolId: number;
+    versionId?: string;
+    forceSync?: boolean;
+  }) {
     isLoading.value = true;
 
     try {
       if (school.value?.rspoId !== schoolId) {
         school.value = null;
         currentVersion.value = null;
-        avaliableVersions.value = null;
+        availableVersions.value = null;
         preparedVersionData.value = null;
 
         school.value = await SchoolRepository.getSchoolById(schoolId);
         await SchoolRepository.openSchool(schoolId);
 
-        avaliableVersions.value =
-          await TimetableVersionRepository.getAvaliableTimetableVersionsBySchool(
+        availableVersions.value =
+          await TimetableVersionRepository.getAvailableTimetableVersionsBySchool(
             school.value.rspoId,
           );
       }
@@ -51,10 +59,10 @@ export const useTimetableStore = defineStore('timetable', () => {
         currentVersion.value = null;
         preparedVersionData.value = null;
 
-        if (avaliableVersions.value?.length) {
+        if (availableVersions.value?.length) {
           const versionCandidate =
-            avaliableVersions.value.find((version) => version.id === versionId) ??
-            avaliableVersions.value[0];
+            availableVersions.value.find((version) => version.id === versionId) ??
+            availableVersions.value[0];
 
           if (!versionCandidate.data)
             versionCandidate.data =
@@ -71,8 +79,8 @@ export const useTimetableStore = defineStore('timetable', () => {
 
       if (shouldSync(school.value.lastSyncAt) || forceSync) {
         school.value = await SchoolRepository.syncSchoolById(school.value.rspoId);
-        avaliableVersions.value =
-          await TimetableVersionRepository.getAvaliableTimetableVersionsBySchool(
+        availableVersions.value =
+          await TimetableVersionRepository.getAvailableTimetableVersionsBySchool(
             school.value.rspoId,
           );
       }
@@ -87,7 +95,7 @@ export const useTimetableStore = defineStore('timetable', () => {
     isLoading,
     sync,
     school,
-    avaliableVersions,
+    availableVersions,
     currentVersion,
     preparedVersionData,
     showMenu,

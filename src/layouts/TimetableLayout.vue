@@ -42,7 +42,9 @@ async function runSync({ forceSync }: { forceSync?: boolean }) {
         description: 'Spróbuj ponownie później',
         action: {
           label: 'Spróbuj ponownie',
-          onClick: async () => { await runSync({ forceSync: true }) },
+          onClick: async () => {
+            await runSync({ forceSync: true });
+          },
         },
       });
   }
@@ -90,7 +92,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
   <div
     v-if="
       timetableStore.school &&
-      timetableStore.avaliableVersions &&
+      timetableStore.availableVersions &&
       timetableStore.currentVersion &&
       timetableStore.preparedVersionData &&
       props.versionId === timetableStore.currentVersion.id &&
@@ -107,10 +109,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
     <TimetableBackgroundSync v-if="timetableStore.isLoading" />
   </div>
 
-  <div
-    v-else
-    class="w-screen min-h-dvh flex flex-col items-center justify-center p-10 text-center"
-  >
+  <div v-else class="w-screen min-h-dvh flex flex-col items-center justify-center p-10 text-center">
     <LucideLoader2
       v-if="timetableStore.isLoading && !timetableStore.currentVersion"
       :size="30"
@@ -133,7 +132,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
         !timetableStore.isLoading &&
         !error &&
         timetableStore.school &&
-        timetableStore.avaliableVersions?.length === 0
+        timetableStore.availableVersions?.length === 0
       "
     >
       <LucideCalendarOff :size="96" />

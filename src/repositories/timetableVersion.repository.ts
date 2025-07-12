@@ -2,7 +2,7 @@ import { db } from '@/db';
 import APIService from '@/api/services/timetableVersion.service';
 
 export default {
-  getAvaliableTimetableVersionsBySchool: async function (schoolRspoId: number) {
+  getAvailableTimetableVersionsBySchool: async function (schoolRspoId: number) {
     return await db.timetableVersions.where('schoolRspoId').equals(schoolRspoId).toArray();
   },
   downloadTimetableVersionDataById: async function (timetableVersionId: string) {

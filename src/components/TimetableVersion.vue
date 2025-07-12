@@ -17,7 +17,7 @@ import { notNullableComputed } from '@/utils';
 const timetableStore = useTimetableStore();
 
 const currentVersion = notNullableComputed(timetableStore.currentVersion);
-const avaliableVersions = notNullableComputed(timetableStore.avaliableVersions);
+const availableVersions = notNullableComputed(timetableStore.availableVersions);
 </script>
 
 <template>
@@ -43,7 +43,7 @@ const avaliableVersions = notNullableComputed(timetableStore.avaliableVersions);
           <DialogTitle> Zmień wersję planu </DialogTitle>
         </DialogHeader>
         <ul>
-          <li v-for="version in avaliableVersions" :key="version.id">
+          <li v-for="version in availableVersions" :key="version.id">
             <RouterLink
               :to="`../../../${version.id}`"
               class="flex justify-between items-center px-3.5 py-2 rounded-md hover:bg-input/50 transition-all"
