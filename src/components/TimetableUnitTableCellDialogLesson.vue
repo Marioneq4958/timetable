@@ -60,67 +60,64 @@ const route = useRoute();
           <div class="my-2" v-if="classes.length">
             <dt class="font-semibold">Oddziały</dt>
             <dd>
-              <RouterLink
-                v-for="(class_, classIndex) in classes"
-                :key="classIndex"
-                :to="{
-                  name: 'timetable:unit',
-                  params: { ...route.params, unitTypeSlug: 'oddzial', unitId: class_.id },
-                }"
-              >
-                {{ class_.fullName ?? class_.name ?? class_.short }}
-                <template v-if="class_.groups.length">
-                  ({{ class_.groups.map((group) => group.short).join(', ') }}) </template
+              <template v-for="(class_, classIndex) in classes" :key="classIndex">
+                <RouterLink
+                  :to="{
+                    name: 'timetable:unit',
+                    params: { ...route.params, unitTypeSlug: 'oddzial', unitId: class_.id },
+                  }"
+                  class="hover:underline"
+                  >{{ class_.fullName ?? class_.name ?? class_.short
+                  }}<template v-if="class_.groups.length">
+                    ({{ class_.groups.map((group) => group.short).join(', ') }})</template
+                  ></RouterLink
                 ><template v-if="classIndex + 1 !== classes.length">, </template>
-              </RouterLink>
+              </template>
             </dd>
           </div>
           <div class="my-2" v-if="teachers.length">
             <dt class="font-semibold">Nauczyciele</dt>
             <dd>
-              <RouterLink
-                v-for="(teacher, teacherIndex) in teachers"
-                :key="teacherIndex"
-                :to="{
-                  name: 'timetable:unit',
-                  params: { ...route.params, unitTypeSlug: 'nauczyciel', unitId: teacher?.id },
-                }"
-              >
-                {{ teacher.fullName ?? teacher.name ?? teacher.short }}
-                <template v-if="teacherIndex + 1 !== teachers.length">, </template>
-              </RouterLink>
+              <template v-for="(teacher, teacherIndex) in teachers" :key="teacherIndex">
+                <RouterLink
+                  :to="{
+                    name: 'timetable:unit',
+                    params: { ...route.params, unitTypeSlug: 'nauczyciel', unitId: teacher?.id },
+                  }"
+                  class="hover:underline"
+                  >{{ teacher.fullName ?? teacher.name ?? teacher.short }}</RouterLink
+                ><template v-if="teacherIndex + 1 !== teachers.length">, </template>
+              </template>
             </dd>
           </div>
           <div class="my-2" v-if="rooms.length">
             <dt class="font-semibold">Sale</dt>
             <dd>
-              <RouterLink
-                v-for="(room, roomIndex) in rooms"
-                :key="roomIndex"
-                :to="{
-                  name: 'timetable:unit',
-                  params: { ...route.params, unitTypeSlug: 'sala', unitId: room.id },
-                }"
-              >
-                {{ room.fullName ?? room.name ?? room.short
-                }}<template v-if="roomIndex + 1 !== rooms.length">, </template>
-              </RouterLink>
+              <template v-for="(room, roomIndex) in rooms" :key="roomIndex">
+                <RouterLink
+                  :to="{
+                    name: 'timetable:unit',
+                    params: { ...route.params, unitTypeSlug: 'sala', unitId: room?.id },
+                  }"
+                  class="hover:underline"
+                  >{{ room.fullName ?? room.name ?? room.short }}</RouterLink
+                ><template v-if="roomIndex + 1 !== rooms.length">, </template>
+              </template>
             </dd>
           </div>
           <div class="my-2" v-if="students.length">
             <dt class="font-semibold">Uczniowie</dt>
             <dd>
-              <RouterLink
-                v-for="(student, studentIndex) in students"
-                :key="studentIndex"
-                :to="{
-                  name: 'timetable:unit',
-                  params: { ...route.params, unitTypeSlug: 'uczen', unitId: student.id },
-                }"
-              >
-                {{ student.name ?? student.short
-                }}<template v-if="studentIndex + 1 !== students.length">, </template>
-              </RouterLink>
+              <template v-for="(student, studentIndex) in students" :key="studentIndex">
+                <RouterLink
+                  :to="{
+                    name: 'timetable:unit',
+                    params: { ...route.params, unitTypeSlug: 'uczen', unitId: student.id },
+                  }"
+                  class="hover:underline"
+                  >{{ student.name ?? student.short }}</RouterLink
+                ><template v-if="studentIndex + 1 !== students.length">, </template>
+              </template>
             </dd>
           </div>
         </dl>
