@@ -6,14 +6,14 @@ import { useObservable, from } from '@vueuse/rxjs';
 import HomeFooter from '@/components/HomeFooter.vue';
 import ThemeSwitchButton from '@/components/ThemeSwitchButton.vue';
 import { useRouter } from "vue-router";
-import { watch } from "vue";
+import { watchEffect } from "vue";
 
 const recentSchools = useObservable(from(liveQuery(SchoolRepository.getRecentSchools)));
 const router = useRouter();
 
-watch(recentSchools, () => {
+watchEffect(() => {
   if (recentSchools.value?.length === 0) router.replace({ name: 'intro' });
-}, { immediate: true })
+})
 </script>
 
 <template>
