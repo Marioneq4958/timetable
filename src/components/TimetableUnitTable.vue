@@ -92,13 +92,15 @@ const mobileTimetable = useMediaQuery('(width < 48rem)');
     }"
     v-if="lessonsWithTimeSlots && lastTimeSlotIndex !== null"
   >
-    <div class="border-b sticky left-0 border-r bg-background" />
-    <div
-      v-for="(day, index) in preparedVersionData.common.days"
-      :key="index"
-      class="px-2 py-4 font-semibold text-center border-r last:border-r-0 border-b"
-    >
-      {{ day.name }}
+    <div class="contents">
+      <div class="border-b sticky left-0 border-r bg-background" />
+      <div
+        v-for="(day, index) in preparedVersionData.common.days"
+        :key="index"
+        class="px-2 py-4 font-semibold text-center border-r last:border-r-0 border-b"
+      >
+        {{ day.name }}
+      </div>
     </div>
     <TimetableUnitTableEmptyRow :days-length="preparedVersionData.common.days.length" />
     <template

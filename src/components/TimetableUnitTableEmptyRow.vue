@@ -8,7 +8,7 @@ const props = defineProps<{ daysLength: number }>();
       v-for="index in props.daysLength + 1"
       :key="index"
       :class="{ 'sticky': index === 1, 'left-0': index === 1 }"
-      class="border-r bg-background"
+      class="border-r last:border-none bg-background"
     />
   </div>
 </template>
