@@ -140,6 +140,9 @@ export interface PreparedTimetableVersionData {
 export function prepareTimetableVersionData(
   data: TimetableVersionData,
 ): PreparedTimetableVersionData {
+  if (data.schemaVersion != "1") throw new Error(`Unsupported schema version! ("${data.schemaVersion}")`);
+  if (data.common.classes.length === 0) throw new Error(`Timetable doesn't contain any classes! Probably an error during parsing.`)
+
   const periods = data.common.periods.length ? data.common.periods : [null];
   const weeks = data.common.weeks.length ? data.common.weeks : [null];
   const lessonsWithTimeSlots = periods.map(() =>

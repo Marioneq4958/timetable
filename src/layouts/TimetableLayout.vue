@@ -146,7 +146,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
         </RouterLink>
       </Button>
     </template>
-    <template v-else-if="!timetableStore.isLoading && !timetableStore.currentVersion">
+    <template v-else-if="!timetableStore.isLoading && (!timetableStore.currentVersion || error)">
       <LucideAlertCircle :size="96" />
       <p class="mt-5 text-xl font-semibold">
         Wystąpił nieoczekiwany błąd, spróbuj ponownie później

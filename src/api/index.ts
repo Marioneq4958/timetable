@@ -5,5 +5,8 @@ if (!apiOrigin) throw new Error('Missing "VITE_API_ORIGIN" environment variable'
 
 export default axios.create({
   baseURL: import.meta.env.VITE_API_ORIGIN,
-  headers: { 'Content-Encoding': 'application/json' },
+  transformResponse: (data, headers) => {
+    if (headers['content-type'] !== 'application/json') throw new Error(`Unsupported response content type "${headers['content-type']}"`);
+    return JSON.parse(data);
+  }
 });
