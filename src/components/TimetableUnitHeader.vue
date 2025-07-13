@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTimetableStore } from '@/stores/timetable.store';
 import type { TimetableUnit } from '@/timetable';
-import { notNullableComputed } from '@/utils';
+import { getUnitTitle, notNullableComputed } from '@/utils';
 import { computed } from 'vue';
 
 const props = defineProps<{
@@ -13,13 +13,13 @@ const school = notNullableComputed(timetableStore.school);
 const title = computed(() => {
   switch (props.unit.type) {
     case 'o':
-      return `Plan oddziału ${props.unit.fullName ?? props.unit.name ?? props.unit.short}`;
+      return `Plan oddziału ${getUnitTitle(props.unit)}`;
     case 'n':
-      return `Plan nauczyciela ${props.unit.fullName ?? props.unit.name ?? props.unit.short}`;
+      return `Plan nauczyciela ${getUnitTitle(props.unit)}`;
     case 's':
-      return `Plan sali ${props.unit.fullName ?? props.unit.name ?? props.unit.short}`;
+      return `Plan sali ${getUnitTitle(props.unit)}`;
     default:
-      return `Plan ucznia ${props.unit.name ?? props.unit.short}`;
+      return `Plan ucznia ${getUnitTitle(props.unit)}`;
   }
 });
 </script>

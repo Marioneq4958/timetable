@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTimetableStore } from '@/stores/timetable.store';
 import type { TimetableLesson } from '@/timetable';
-import { getEntitiesFromMap, notNullableComputed } from '@/utils';
+import { getEntitiesFromMap, getUnitTitle, notNullableComputed } from '@/utils';
 import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 
@@ -67,7 +67,7 @@ const route = useRoute();
                     params: { ...route.params, unitTypeSlug: 'oddzial', unitId: class_.id },
                   }"
                   class="hover:underline"
-                  >{{ class_.fullName ?? class_.name ?? class_.short
+                  >{{ getUnitTitle(class_)
                   }}<template v-if="class_.groups.length">
                     ({{ class_.groups.map((group) => group.short).join(', ') }})</template
                   ></RouterLink
@@ -85,7 +85,7 @@ const route = useRoute();
                     params: { ...route.params, unitTypeSlug: 'nauczyciel', unitId: teacher?.id },
                   }"
                   class="hover:underline"
-                  >{{ teacher.fullName ?? teacher.name ?? teacher.short }}</RouterLink
+                  >{{ getUnitTitle(teacher) }}</RouterLink
                 ><template v-if="teacherIndex + 1 !== teachers.length">, </template>
               </template>
             </dd>
@@ -100,7 +100,7 @@ const route = useRoute();
                     params: { ...route.params, unitTypeSlug: 'sala', unitId: room?.id },
                   }"
                   class="hover:underline"
-                  >{{ room.fullName ?? room.name ?? room.short }}</RouterLink
+                  >{{ getUnitTitle(room) }}</RouterLink
                 ><template v-if="roomIndex + 1 !== rooms.length">, </template>
               </template>
             </dd>

@@ -4,7 +4,7 @@ import TimetableNavigationSection from './TimetableNavigationSection.vue';
 import { LucideGraduationCap, LucideMapPin, LucideUsers } from 'lucide-vue-next';
 import TimetableNavigationUnit from './TimetableNavigationUnit.vue';
 import { useRoute } from 'vue-router';
-import { notNullableComputed } from '@/utils';
+import { notNullableComputed, getUnitTitle } from '@/utils';
 
 const timetableStore = useTimetableStore();
 const route = useRoute();
@@ -23,7 +23,7 @@ const common = notNullableComputed(timetableStore.preparedVersionData?.common);
       <TimetableNavigationUnit
         v-for="unit in common.classes.values()"
         :key="unit.id"
-        :name="unit.fullName ?? unit.name ?? unit.short ?? 'Bez nazwy'"
+        :name="getUnitTitle(unit)"
         :to="{
           name: 'timetable:unit',
           params: { ...route.params, unitId: unit.id, unitTypeSlug: 'oddzial' },
@@ -35,7 +35,7 @@ const common = notNullableComputed(timetableStore.preparedVersionData?.common);
       <TimetableNavigationUnit
         v-for="unit in common.teachers.values()"
         :key="unit.id"
-        :name="unit.fullName ?? unit.name ?? unit.short ?? 'Bez nazwy'"
+        :name="getUnitTitle(unit)"
         :to="{
           name: 'timetable:unit',
           params: { ...route.params, unitId: unit.id, unitTypeSlug: 'nauczyciel' },
@@ -47,7 +47,7 @@ const common = notNullableComputed(timetableStore.preparedVersionData?.common);
       <TimetableNavigationUnit
         v-for="unit in common.rooms.values()"
         :key="unit.id"
-        :name="unit.fullName ?? unit.name ?? unit.short ?? 'Bez nazwy'"
+        :name="getUnitTitle(unit)"
         :to="{
           name: 'timetable:unit',
           params: { ...route.params, unitId: unit.id, unitTypeSlug: 'sala' },
@@ -59,7 +59,7 @@ const common = notNullableComputed(timetableStore.preparedVersionData?.common);
       <TimetableNavigationUnit
         v-for="unit in common.students.values()"
         :key="unit.id"
-        :name="unit.name ?? unit.short ?? 'Bez nazwy'"
+        :name="getUnitTitle(unit)"
         :to="{
           name: 'timetable:unit',
           params: { ...route.params, unitId: unit.id, unitTypeSlug: 'uczen' },

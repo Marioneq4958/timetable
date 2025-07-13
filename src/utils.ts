@@ -2,6 +2,7 @@ import { computed } from 'vue';
 import type { SchoolEntity } from './db/entities/school.entity';
 import { type ClassValue, clsx } from 'clsx';
 import { twMerge } from 'tailwind-merge';
+import type { TimetableClass, TimetableRoom, TimetableStudent, TimetableTeacher } from './timetable';
 
 
 /**
@@ -36,3 +37,5 @@ export const notNullableComputed = <T>(value: T) =>
     if (value === null) throw new Error('Null value is not accepted!');
     return value as NonNullable<T>;
   });
+
+export const getUnitTitle = (unit: TimetableClass | TimetableRoom | TimetableTeacher | TimetableStudent) => ('fullName' in unit ? unit.fullName : undefined) ?? unit.name ?? unit.short ?? 'Bez nazwy';

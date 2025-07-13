@@ -7,7 +7,7 @@ import type { TimetableUnit, UnitType } from '@/timetable';
 import { ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { useMediaQuery } from '@vueuse/core';
-import { notNullableComputed } from '@/utils';
+import { getUnitTitle, notNullableComputed } from '@/utils';
 
 const props = defineProps<{
   unitType: UnitType;
@@ -65,9 +65,7 @@ const useDrawer = useMediaQuery('(width < 48rem)');
   <template v-if="unit">
     <TimetableDrawerTrigger
       v-if="useDrawer"
-      :title="
-        ('fullName' in unit ? unit.fullName : undefined) ?? unit.name ?? unit.short ?? 'Bez nazwy'
-      "
+      :title="getUnitTitle(unit)"
       @click="timetableStore.toggleMenu(true)"
     />
     <TimetableUnitHeader :unit="unit" />
