@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useTimetableStore } from '@/stores/timetable.store';
 import type { PreparedTimetableVersionData, TimetableLesson, TimetableUnit } from '@/timetable';
-import { computed, ref, watch } from 'vue';
+import { computed, ref, watchEffect } from 'vue';
 import { useMediaQuery } from '@vueuse/core';
 import TimetableUnitTableLessonsRow from '@/components/TimetableUnitTableLessonsRow.vue';
 import TimetableUnitTableEmptyRow from '@/components/TimetableUnitTableEmptyRow.vue';
@@ -51,14 +51,10 @@ function getLastTimeSlotIndex(lessons: TimetableLesson[][][][][]) {
   return index;
 }
 
-watch(
-  () => props.unit,
-  () => {
-    lessonsWithTimeSlots.value = filterLessonsByUnit(preparedVersionData.value, props.unit);
-    lastTimeSlotIndex.value = getLastTimeSlotIndex(lessonsWithTimeSlots.value);
-  },
-  { immediate: true },
-);
+watchEffect(() => {
+  lessonsWithTimeSlots.value = filterLessonsByUnit(preparedVersionData.value, props.unit);
+  lastTimeSlotIndex.value = getLastTimeSlotIndex(lessonsWithTimeSlots.value);
+});
 
 const gridRows = computed(() => {
   if (!lessonsWithTimeSlots.value || lastTimeSlotIndex.value === null) return 0;
