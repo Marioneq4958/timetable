@@ -150,12 +150,15 @@ async function setupMap() {
 
   watch(
     () => props.schoolId,
-    async () => {
-      if (props.schoolId && props.schoolId !== selectedSchool.value?.rspoId) {
+    async (schoolId) => {
+      if (schoolId && schoolId !== selectedSchool.value?.rspoId) {
         // Is saving these schools in indexeddb OK? I don't know.
-        selectedSchool.value = await schoolRepository.getSchoolById(props.schoolId);
-        map.setView(new L.LatLng(selectedSchool.value.geoLat, selectedSchool.value.geoLong));
-        if (map.getZoom() < 8) map.setZoom(10);
+        const school = await schoolRepository.getSchoolById(schoolId);
+        if (schoolId === props.schoolId) {
+          selectedSchool.value = school;
+          map.setView(new L.LatLng(school.geoLat, school.geoLong));
+          if (map.getZoom() < 8) map.setZoom(10);
+        }
       }
     },
     { immediate: true },
