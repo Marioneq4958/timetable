@@ -9,7 +9,7 @@ import { notNullableComputed, getUnitTitle } from '@/utils';
 const timetableStore = useTimetableStore();
 const route = useRoute();
 
-const common = notNullableComputed(timetableStore.preparedVersionData?.common);
+const common = notNullableComputed(() => timetableStore.preparedVersionData?.common);
 </script>
 
 <template>

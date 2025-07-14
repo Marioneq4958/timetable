@@ -32,8 +32,9 @@ export function common<T>(array: T[]): T | undefined {
 export const getEntitiesFromMap = <T>(map: Map<string, T>, ids: string[]) =>
   ids.map((id) => map.get(id)!);
 
-export const notNullableComputed = <T>(value: T) =>
+export const notNullableComputed = <T>(getter: () => T) =>
   computed(() => {
+    const value = getter();
     if (value === null) throw new Error('Null value is not accepted!');
     return value as NonNullable<T>;
   });

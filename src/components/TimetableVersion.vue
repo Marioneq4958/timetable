@@ -16,9 +16,9 @@ import { notNullableComputed } from '@/utils';
 
 const timetableStore = useTimetableStore();
 
-const currentVersion = notNullableComputed(timetableStore.currentVersion);
-const availableVersions = notNullableComputed(timetableStore.availableVersions);
-const school = notNullableComputed(timetableStore.school);
+const currentVersion = notNullableComputed(() => timetableStore.currentVersion);
+const availableVersions = notNullableComputed(() => timetableStore.availableVersions);
+const school = notNullableComputed(() => timetableStore.school);
 </script>
 
 <template>

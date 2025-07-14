@@ -9,7 +9,7 @@ const props = defineProps<{
 }>();
 
 const timetableStore = useTimetableStore();
-const school = notNullableComputed(timetableStore.school);
+const school = notNullableComputed(() => timetableStore.school);
 const title = computed(() => {
   switch (props.unit.type) {
     case 'o':

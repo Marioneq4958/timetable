@@ -9,7 +9,7 @@ const props = defineProps<{ lessons: TimetableLesson[] }>();
 
 const timetableStore = useTimetableStore();
 
-const preparedVersionData = notNullableComputed(timetableStore.preparedVersionData);
+const preparedVersionData = notNullableComputed(() => timetableStore.preparedVersionData);
 
 const groupsText = computed(() => groupPlural[pluralRules.select(props.lessons.length)]);
 const commonSubject = computed(() => {

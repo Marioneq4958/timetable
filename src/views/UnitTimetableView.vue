@@ -19,7 +19,7 @@ const unit = ref<TimetableUnit | null>(null);
 const router = useRouter();
 const route = useRoute();
 
-const preparedVersionData = notNullableComputed(timetableStore.preparedVersionData);
+const preparedVersionData = notNullableComputed(() => timetableStore.preparedVersionData);
 
 function getUnit(type: UnitType, id: string): TimetableUnit | undefined {
   let unitWithoutType: Omit<TimetableUnit, 'type'> | undefined = undefined;

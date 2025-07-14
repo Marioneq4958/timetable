@@ -8,7 +8,7 @@ const props = defineProps<{ lesson: TimetableLesson }>();
 
 const timetableStore = useTimetableStore();
 
-const preparedVersionData = notNullableComputed(timetableStore.preparedVersionData);
+const preparedVersionData = notNullableComputed(() => timetableStore.preparedVersionData);
 
 const subject = computed(() => {
   if (!props.lesson.subjectId) return;

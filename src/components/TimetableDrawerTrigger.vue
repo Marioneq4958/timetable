@@ -7,7 +7,7 @@ const emit = defineEmits(['click']);
 const props = defineProps<{ title: string }>();
 const timetableStore = useTimetableStore();
 
-const school = notNullableComputed(timetableStore.school);
+const school = notNullableComputed(() => timetableStore.school);
 </script>
 
 <template>

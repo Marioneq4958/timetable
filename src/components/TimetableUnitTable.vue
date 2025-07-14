@@ -10,7 +10,7 @@ import { notNullableComputed } from '@/utils';
 const props = defineProps<{ unit: TimetableUnit }>();
 const timetableStore = useTimetableStore();
 
-const preparedVersionData = notNullableComputed(timetableStore.preparedVersionData);
+const preparedVersionData = notNullableComputed(() => timetableStore.preparedVersionData);
 const lessonsWithTimeSlots = ref<TimetableLesson[][][][][] | null>();
 
 const periodIndex = ref(0);
@@ -68,7 +68,8 @@ const gridRows = computed(() => {
       const breakDuration = nextTimeSlot.beginMinute - timeSlot.endMinute;
 
       const lessonHeight = timeSlotDuration > 0 ? timeSlotDuration / 45 : 0;
-      const breakHeight = timeSlot.endMinute - timeSlot.beginMinute && breakDuration > 0 ? breakDuration / 45 : 0;
+      const breakHeight =
+        timeSlot.endMinute - timeSlot.beginMinute && breakDuration > 0 ? breakDuration / 45 : 0;
       return `${lessonHeight}fr ${breakHeight}fr`;
     })
     .join(' ');
