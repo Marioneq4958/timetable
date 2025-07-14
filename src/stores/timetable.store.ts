@@ -27,7 +27,7 @@ export const useTimetableStore = defineStore('timetable', () => {
   const currentVersion = ref<TimetableVersionEntity | null>(null);
   const preparedVersionData = ref<PreparedTimetableVersionData | null>(null);
 
-  // TODO: Sync conflicts
+  const syncLock = ref(false);
   async function sync({
     schoolId,
     versionId,
@@ -37,6 +37,8 @@ export const useTimetableStore = defineStore('timetable', () => {
     versionId?: string;
     forceSync?: boolean;
   }) {
+    if (syncLock.value) return;
+    syncLock.value = true;
     isLoading.value = true;
 
     try {
@@ -88,6 +90,7 @@ export const useTimetableStore = defineStore('timetable', () => {
       throw reason;
     } finally {
       isLoading.value = false;
+      syncLock.value = false;
     }
   }
 
