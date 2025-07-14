@@ -50,8 +50,8 @@ const school = notNullableComputed(timetableStore.school);
                 name: 'timetable:version',
                 params: {
                   schoolId: school.rspoId,
-                  versionId: version.id.split('/')[0],
-                  versionType: version.id.split('/')[1],
+                  versionId: version.id.split('/')[1],
+                  versionType: version.id.split('/')[0],
                 },
               }"
               class="flex justify-between items-center px-3.5 py-2 rounded-md hover:bg-input/50 transition-all"

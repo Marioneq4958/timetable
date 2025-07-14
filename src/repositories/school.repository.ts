@@ -12,7 +12,6 @@ const syncSchoolById = async function (id: number) {
     const { lastOpenedAt, ...mappedWithoutOpenedAt } = mapped;
     await db.schools.update(id, mappedWithoutOpenedAt);
   } else db.schools.add(mapped);
-
   await Promise.all(
     fetched.optivum_versions.map(async (optivumVersionMeta) => {
       if (await db.timetableVersions.get(`optivum/${optivumVersionMeta.id}`)) return;

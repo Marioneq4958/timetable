@@ -17,6 +17,9 @@ import TimetableSidebar from '@/components/TimetableSidebar.vue';
 import TimetableDrawer from '@/components/TimetableDrawer.vue';
 import { toast } from 'vue-sonner';
 import TimetableBackgroundSync from '@/components/TimetableBackgroundSync.vue';
+import type { SchoolEntity } from '@/db/entities/school.entity';
+import type { TimetableVersionEntity } from '@/db/entities/timetableVersion.entity';
+import type { PreparedTimetableVersionData } from '@/timetable';
 
 const props = defineProps<{
   schoolId: number;
@@ -57,28 +60,36 @@ watch(
 );
 
 watch(
-  () => [timetableStore.school, timetableStore.currentVersion, timetableStore.preparedVersionData],
-  async () => {
+  () => [timetableStore.school, timetableStore.currentVersion, timetableStore.preparedVersionData] as [
+    SchoolEntity | null,
+    TimetableVersionEntity | null,
+    PreparedTimetableVersionData | null
+  ],
+  async ([school, currentVersion, preparedVersionData]: [
+    SchoolEntity | null,
+    TimetableVersionEntity | null,
+    PreparedTimetableVersionData | null
+  ]) => {
     if (
-      !timetableStore.school ||
-      !timetableStore.currentVersion ||
-      !timetableStore.preparedVersionData
+      !school ||
+      !currentVersion ||
+      !preparedVersionData
     )
       return;
-    const [versionType, versionId] = timetableStore.currentVersion.id.split('/');
+    const [versionType, versionId] = currentVersion.id.split('/');
     if (route.name === 'timetable' || route.name === 'timetable:version') {
       await router.replace({
         name: 'timetable:unit',
         params: {
-          schoolId: timetableStore.school.rspoId, versionId, versionType,
+          schoolId: school.rspoId, versionId, versionType,
           unitTypeSlug: 'oddzial',
-          unitId: [...timetableStore.preparedVersionData.common.classes.values()][0].id,
+          unitId: [...preparedVersionData.common.classes.values()][0].id,
         },
       });
     } else {
       await router.replace({
         name: route.name,
-        params: { ...route.params, schoolId: timetableStore.school.rspoId, versionId, versionType },
+        params: { ...route.params, schoolId: school.rspoId, versionId, versionType },
       });
     }
   },
