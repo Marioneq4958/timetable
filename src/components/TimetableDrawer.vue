@@ -11,8 +11,8 @@ const timetableStore = useTimetableStore();
   <!-- I know this component is buggy, but I don't have any good alternatives -->
   <Drawer v-model:open="timetableStore.showMenu">
     <DrawerContent>
-      <div class="flex flex-col h-[710px]">
-        <TimetableNavigation data-vaul-no-drag class="overflow-y-scroll px-5" />
+      <div class="flex flex-col h-[710px] overflow-hidden">
+        <TimetableNavigation data-vaul-no-drag class="overflow-y-auto px-5" />
         <div class="flex-1" />
         <TimetableVersion class="px-5 py-3" />
       </div>
